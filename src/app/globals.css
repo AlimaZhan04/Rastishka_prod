@@ -1,0 +1,149 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+  Дизайн-система «РАСтишка».
+  Бренд-палитра: бордо #7E2A3D, пыльно-розовый #F2C4CB, бледно-розовый #F8E3E6,
+  шалфейно-оливковый #838B72, кремовый #F7F1EA. Скругления 20–28px, мягкие тени.
+  Одна светлая тема (без dark mode в MVP).
+*/
+
+:root {
+  --radius: 1.25rem;
+
+  /* shadcn semantic tokens, themed with the brand palette */
+  --background: #f7f1ea; /* cream */
+  --foreground: #2a1a1e; /* deep warm near-black */
+
+  --card: #ffffff;
+  --card-foreground: #2a1a1e;
+
+  --popover: #ffffff;
+  --popover-foreground: #2a1a1e;
+
+  --primary: #7e2a3d; /* burgundy */
+  --primary-foreground: #ffffff;
+
+  --secondary: #f8e3e6; /* pale rose (soft chips/buttons) */
+  --secondary-foreground: #7e2a3d;
+
+  --muted: #f1e6e8;
+  --muted-foreground: #6f5358;
+
+  --accent: #f2c4cb; /* dusty pink (hover/accent) */
+  --accent-foreground: #7e2a3d;
+
+  --destructive: #c0392b;
+  --destructive-foreground: #ffffff;
+
+  --border: #ead9dc;
+  --input: #ead9dc;
+  --ring: #7e2a3d;
+
+  /* sidebar (admin) */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2a1a1e;
+  --sidebar-primary: #7e2a3d;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f8e3e6;
+  --sidebar-accent-foreground: #7e2a3d;
+  --sidebar-border: #ead9dc;
+  --sidebar-ring: #7e2a3d;
+
+  /* charts (admin dashboard) */
+  --chart-1: #7e2a3d;
+  --chart-2: #838b72;
+  --chart-3: #f2c4cb;
+  --chart-4: #c98a96;
+  --chart-5: #b5bfa1;
+}
+
+@theme inline {
+  /* semantic colors → Tailwind utilities (bg-primary, text-muted-foreground, border-border, …) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* decorative brand colors (hearts, blobs, illustrations) */
+  --color-brand-burgundy: #7e2a3d;
+  --color-brand-pink: #f2c4cb;
+  --color-brand-rose: #f8e3e6;
+  --color-brand-sage: #838b72;
+  --color-brand-cream: #f7f1ea;
+
+  /* radius scale derived from --radius */
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  /* fonts (CSS variables provided by next/font in layout.tsx) */
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-heading), var(--font-body), sans-serif;
+  }
+}
+
+@utility shadow-soft {
+  box-shadow: 0 12px 30px -12px rgba(126, 42, 61, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

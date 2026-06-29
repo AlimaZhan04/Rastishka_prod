@@ -1,0 +1,343 @@
+// Prisma schema — сайт «РАСтишка» (P0 MVP; P1-поля nullable, заложены заранее).
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Connection URLs (url / directUrl) задаются в prisma.config.ts (Prisma 7).
+}
+
+// ============ ENUMS ============
+
+enum VisitFormat {
+  FULL_DAY // полный день 8:00–19:00
+  MORNING // утро 8:00–13:00
+  LUNCH // обед 14:00–19:00
+  INDIVIDUAL // индивидуальный график
+}
+
+enum SpeechLevel {
+  AGE_APPROPRIATE // развита по возрасту
+  DELAYED // задержка речевого развития
+  NON_VERBAL // не говорит
+}
+
+enum BehaviorState {
+  NO_ISSUES
+  HAS_ISSUES
+}
+
+enum ToiletLevel {
+  TRAINED // приучен и сообщает
+  NEEDS_PROMPTING // нужно высаживать
+  NOT_TRAINED // не приучен / памперс
+}
+
+enum FoodSkill {
+  INDEPENDENT // ест самостоятельно
+  NO_UTENSILS // ест без приборов
+  SELECTIVE // пищевая избирательность
+  NO_SOLIDS // не жуёт твёрдую пищу / детское питание
+}
+
+enum PrevExperience {
+  KINDERGARTEN // ходили в сад
+  PRIVATE_LESSONS // частные занятия
+  NONE // никуда не ходили
+}
+
+enum ApplicationStatus {
+  NEW
+  IN_PROGRESS
+  CONTACTED
+  ENROLLED
+  REJECTED
+  ARCHIVED
+}
+
+enum ResponseStatus {
+  NEW
+  IN_REVIEW
+  INVITED
+  REJECTED
+  ARCHIVED
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+  ARCHIVED
+}
+
+enum AdminRole {
+  ADMIN
+  CONTENT_MANAGER
+}
+
+enum NotificationEvent {
+  NEW_APPLICATION
+  NEW_RESPONSE
+  NOTIFICATION_ERROR
+}
+
+enum NotificationChannel {
+  TELEGRAM
+  WHATSAPP
+  EMAIL
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// ============ APPLICATION + CHILD PROFILE (1:1) ============
+
+model Application {
+  id String @id @default(cuid())
+
+  // --- сырые ответы 7-шаговой анкеты ---
+  visitFormat        VisitFormat
+  individualNote     String?        @db.VarChar(200) // только при INDIVIDUAL
+  speech             SpeechLevel
+  behavior           BehaviorState
+  behaviorNote       String?        @db.VarChar(200) // только при HAS_ISSUES
+  toilet             ToiletLevel
+  food               FoodSkill[] // мультивыбор (Postgres array)
+  previousExperience PrevExperience
+
+  // --- шаг 7: контакты + согласие ---
+  parentName     String  @db.VarChar(120)
+  phone          String  @db.VarChar(16) // E.164: +996XXXXXXXXX
+  consentGiven   Boolean
+  consentAt      DateTime
+  consentVersion String   @default("v1")
+
+  // --- источник / UTM (P1) ---
+  sourcePage  String?
+  sourceCta   String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+
+  // --- workflow администратора ---
+  status        ApplicationStatus @default(NEW)
+  adminComment  String?           @db.Text
+  responsibleId String?
+  responsible   AdminUser?        @relation("AppResponsible", fields: [responsibleId], references: [id])
+  nextContactAt DateTime?
+
+  // --- защита от дубля ---
+  submissionHash String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  childProfile  ChildProfile?
+  notifications NotificationLog[]
+
+  @@index([status, createdAt])
+  @@index([phone])
+  @@index([createdAt])
+}
+
+model ChildProfile {
+  id            String      @id @default(cuid())
+  applicationId String      @unique // 1:1
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  // производные человекочитаемые поля (deriveChildProfile)
+  speechLevelText      String  @db.Text
+  behaviorNotes        String  @db.Text
+  selfCare             String  @db.Text
+  foodNotes            String  @db.Text
+  adaptationExperience String  @db.Text
+  recommendedRoute     String? @db.Text
+  adminNotes           String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ VACANCIES + RESPONSES ============
+
+model Vacancy {
+  id           String        @id @default(cuid())
+  title        String        @db.VarChar(200)
+  preview      String        @db.VarChar(100)
+  duties       String        @db.Text
+  requirements String        @db.Text
+  offer        String        @db.Text
+  icon         String?
+  status       ContentStatus @default(DRAFT)
+  sortOrder    Int           @default(0)
+
+  slug           String  @unique
+  seoTitle       String? @db.VarChar(180)
+  seoDescription String? @db.VarChar(320)
+  ogImage        String?
+
+  responsesCount Int @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  responses VacancyResponse[]
+
+  @@index([status, sortOrder])
+}
+
+model VacancyResponse {
+  id        String  @id @default(cuid())
+  vacancyId String
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+
+  name           String  @db.VarChar(120)
+  phone          String  @db.VarChar(16)
+  resumeFilePath String? // ключ объекта в приватном bucket
+  resumeFileName String?
+  resumeMimeType String?
+  resumeSize     Int?
+  experienceText String? @db.VarChar(2000)
+
+  status        ResponseStatus @default(NEW)
+  adminComment  String?        @db.Text
+  responsibleId String?
+  responsible   AdminUser?     @relation("RespResponsible", fields: [responsibleId], references: [id])
+
+  submissionHash String  @unique
+  sourcePage     String?
+  utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  notifications NotificationLog[]
+
+  @@index([vacancyId, status])
+  @@index([status, createdAt])
+}
+
+// ============ NEWS ============
+
+model News {
+  id        String        @id @default(cuid())
+  title     String        @db.VarChar(200)
+  shortText String        @db.VarChar(500)
+  fullText  String        @db.Text
+  image     String?
+  alt       String?       @db.VarChar(200) // обязателен при PUBLISHED (app-level)
+  date      DateTime // авто при создании, редактируется админом
+  status    ContentStatus @default(DRAFT)
+  slug      String        @unique
+
+  seoTitle       String? @db.VarChar(180)
+  seoDescription String? @db.VarChar(320)
+  ogImage        String?
+
+  authorId String?
+  author   AdminUser? @relation(fields: [authorId], references: [id])
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  @@index([status, date])
+}
+
+// ============ AUTH / USERS ============
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  name         String    @db.VarChar(120)
+  login        String    @unique
+  email        String?   @unique
+  passwordHash String
+  role         AdminRole @default(CONTENT_MANAGER)
+  active       Boolean   @default(true)
+
+  // доступ контент-менеджера «по отдельному разрешению»
+  canViewApplications Boolean @default(false)
+  canViewResponses    Boolean @default(false)
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  authoredNews         News[]
+  appsResponsible      Application[]     @relation("AppResponsible")
+  responsesResponsible VacancyResponse[] @relation("RespResponsible")
+  auditLogs            AuditLog[]
+
+  @@index([role, active])
+}
+
+// ============ NOTIFICATIONS ============
+
+model NotificationLog {
+  id         String              @id @default(cuid())
+  eventType  NotificationEvent
+  channel    NotificationChannel
+  recipient  String
+  status     NotificationStatus  @default(PENDING)
+  error      String?             @db.Text
+  retryCount Int                 @default(0)
+  payload    Json?
+
+  applicationId     String?
+  application       Application?     @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  vacancyResponseId String?
+  vacancyResponse   VacancyResponse? @relation(fields: [vacancyResponseId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, eventType])
+  @@index([applicationId])
+  @@index([vacancyResponseId])
+}
+
+// ============ AUDIT (P2) ============
+
+model AuditLog {
+  id         String     @id @default(cuid())
+  userId     String?
+  user       AdminUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String
+  diff       Json?
+  createdAt  DateTime   @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId, createdAt])
+}
+
+// ============ SITE SETTINGS (P1 singletons) ============
+
+model SiteSetting {
+  id          String   @id @default("singleton")
+  data        Json // hero, "Для кого мы", карточки посещения, телефон, соцсети, адреса филиалов
+  updatedAt   DateTime @updatedAt
+  updatedById String?
+}
+
+model NotificationConfig {
+  id              String   @id @default("singleton")
+  telegramEnabled Boolean  @default(true)
+  telegramChatId  String?
+  whatsappEnabled Boolean  @default(false)
+  whatsappTo      String?
+  emailEnabled    Boolean  @default(false)
+  emailRecipients String[]
+  updatedAt       DateTime @updatedAt
+}
