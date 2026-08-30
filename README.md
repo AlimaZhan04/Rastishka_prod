@@ -62,3 +62,10 @@ shadow-БД для `migrate dev`). Файлы миграций для production
 
 Документация по проекту: [docs/Rastishka_Final_TZ_v1.1.docx](docs/Rastishka_Final_TZ_v1.1.docx),
 макеты — [docs/design](docs/design).
+
+## Управление разработкой
+
+- Границы MVP: [docs/MVP_SCOPE.md](docs/MVP_SCOPE.md).
+- Трекер 68 требований: [docs/MVP_REQUIREMENTS_TRACKER.md](docs/MVP_REQUIREMENTS_TRACKER.md).
+- Открытые продуктовые и юридические решения: [docs/DECISIONS_AND_OPEN_QUESTIONS.md](docs/DECISIONS_AND_OPEN_QUESTIONS.md).
+- Минимальный процесс веток, PR и проверок: [docs/DEVELOPMENT_WORKFLOW.md](docs/DEVELOPMENT_WORKFLOW.md).
