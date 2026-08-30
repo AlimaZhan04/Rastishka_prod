@@ -6,10 +6,18 @@ import { PrismaClient } from "../src/generated/prisma/client";
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
+function requiredSeedPassword(variableName: string): string {
+  const value = process.env[variableName];
+  if (!value || value.length < 16) {
+    throw new Error(`${variableName} must be set to a password of at least 16 characters.`);
+  }
+  return value;
+}
+
 async function main() {
   // --- Пользователи админки ---
   const adminLogin = process.env.SEED_ADMIN_LOGIN ?? "admin";
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "change-me-strong";
+  const adminPassword = requiredSeedPassword("SEED_ADMIN_PASSWORD");
   const adminName = process.env.SEED_ADMIN_NAME ?? "Администратор";
   const passwordHash = await hash(adminPassword);
 
@@ -27,17 +35,25 @@ async function main() {
     },
   });
 
-  await prisma.adminUser.upsert({
-    where: { login: "content" },
-    update: {},
-    create: {
-      name: "Контент-менеджер",
-      login: "content",
-      passwordHash: await hash("change-me-content"),
-      role: "CONTENT_MANAGER",
-      active: true,
-    },
-  });
+  const contentLogin = process.env.SEED_CONTENT_MANAGER_LOGIN;
+  const contentPassword = process.env.SEED_CONTENT_MANAGER_PASSWORD;
+  if (contentLogin || contentPassword) {
+    if (!contentLogin) {
+      throw new Error("SEED_CONTENT_MANAGER_LOGIN is required when creating a content manager.");
+    }
+    const passwordHash = await hash(requiredSeedPassword("SEED_CONTENT_MANAGER_PASSWORD"));
+    await prisma.adminUser.upsert({
+      where: { login: contentLogin },
+      update: {},
+      create: {
+        name: process.env.SEED_CONTENT_MANAGER_NAME ?? "Контент-менеджер",
+        login: contentLogin,
+        passwordHash,
+        role: "CONTENT_MANAGER",
+        active: true,
+      },
+    });
+  }
 
   // --- Настройки сайта (singleton) ---
   await prisma.siteSetting.upsert({

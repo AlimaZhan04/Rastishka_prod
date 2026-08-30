@@ -69,3 +69,4 @@ shadow-БД для `migrate dev`). Файлы миграций для production
 - Трекер 68 требований: [docs/MVP_REQUIREMENTS_TRACKER.md](docs/MVP_REQUIREMENTS_TRACKER.md).
 - Открытые продуктовые и юридические решения: [docs/DECISIONS_AND_OPEN_QUESTIONS.md](docs/DECISIONS_AND_OPEN_QUESTIONS.md).
 - Минимальный процесс веток, PR и проверок: [docs/DEVELOPMENT_WORKFLOW.md](docs/DEVELOPMENT_WORKFLOW.md).
+- Подготовка staging: [docs/STAGING_SETUP.md](docs/STAGING_SETUP.md).

@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { prisma } from "@/lib/db";
+import { logServerError } from "@/lib/observability";
 
 export type SiteSettings = {
   hero: { title: string; subtitle: string; imageAlt: string };
@@ -53,7 +54,8 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     const row = await prisma.siteSetting.findUnique({ where: { id: "singleton" } });
     if (!row?.data) return DEFAULT_SITE_SETTINGS;
     return { ...DEFAULT_SITE_SETTINGS, ...(row.data as Partial<SiteSettings>) };
-  } catch {
+  } catch (error) {
+    logServerError("site_settings.fetch_failed", error, { operation: "find_site_settings" });
     return DEFAULT_SITE_SETTINGS;
   }
 });
