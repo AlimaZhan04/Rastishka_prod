@@ -1,6 +1,7 @@
 import { getSiteSettings } from "@/lib/content/site";
 import { PublicHeader } from "@/components/layout/public-header";
 import { Footer } from "@/components/layout/footer";
+import { AnketaModal } from "@/components/anketa/anketa-modal";
 
 export default async function PublicLayout({
   children,
@@ -11,7 +12,7 @@ export default async function PublicLayout({
       <PublicHeader phone={settings.phone} socials={settings.socials} />
       <main className="flex-1">{children}</main>
       <Footer phone={settings.phone} socials={settings.socials} />
-      {/* AnketaModal монтируется здесь в Фазе 2 */}
+      <AnketaModal />
     </>
   );
 }

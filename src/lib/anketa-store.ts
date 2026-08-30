@@ -3,7 +3,13 @@
 import { create } from "zustand";
 import type { VisitFormat } from "@/lib/enums";
 
-export type AnketaSource = { page?: string; cta?: string };
+export type AnketaSource = {
+  page?: string;
+  cta?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+};
 
 type AnketaState = {
   isOpen: boolean;
@@ -21,5 +27,5 @@ export const useAnketa = create<AnketaState>((set) => ({
   source: undefined,
   open: (opts) =>
     set({ isOpen: true, visitFormat: opts?.visitFormat, source: opts?.source }),
-  close: () => set({ isOpen: false }),
+  close: () => set({ isOpen: false, visitFormat: undefined, source: undefined }),
 }));

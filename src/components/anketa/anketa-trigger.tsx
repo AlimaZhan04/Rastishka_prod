@@ -23,11 +23,15 @@ export function AnketaTrigger({
   return (
     <Button
       onClick={(e) => {
+        const search = new URLSearchParams(window.location.search);
         open({
           visitFormat,
           source: {
-            page: typeof window !== "undefined" ? window.location.pathname : undefined,
+            page: window.location.pathname,
             cta: ctaSource,
+            utmSource: search.get("utm_source") || undefined,
+            utmMedium: search.get("utm_medium") || undefined,
+            utmCampaign: search.get("utm_campaign") || undefined,
           },
         });
         onClick?.(e);
