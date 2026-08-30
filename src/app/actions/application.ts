@@ -11,6 +11,7 @@ import {
 import { logServerError } from "@/lib/observability";
 import { saveApplication } from "@/lib/server/application-repository";
 import { allowApplicationSubmission } from "@/lib/server/submission-rate-limit";
+import { notifyNewApplicationInTelegram } from "@/lib/server/telegram-notifier";
 
 function clientIdentifier(requestHeaders: Headers): string {
   const forwarded = requestHeaders.get("x-forwarded-for")?.split(",")[0]?.trim();
@@ -43,7 +44,17 @@ export async function submitApplication(
   }
 
   try {
-    await saveApplication(parsed.data, guard.idempotencyKey);
+    const saved = await saveApplication(parsed.data, guard.idempotencyKey);
+    if (saved.created) {
+      try {
+        await notifyNewApplicationInTelegram(saved.applicationId);
+      } catch (error) {
+        // A messaging outage must not make a successfully saved application look failed.
+        logServerError("application.telegram_notification_failed", error, {
+          operation: "send_new_application_notification",
+        });
+      }
+    }
     return { status: "success" };
   } catch (error) {
     logServerError("application.submit_failed", error, { operation: "create_application" });

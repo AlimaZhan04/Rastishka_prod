@@ -20,15 +20,24 @@ function isUniqueConstraintError(error: unknown): boolean {
   );
 }
 
+export type SavedApplication = {
+  applicationId: string;
+  created: boolean;
+};
+
 /**
  * Saves the raw answers and the derived draft profile atomically. A reused idempotency
  * key is deliberately treated as a successful submission, so a retry never creates a copy.
  */
-export async function saveApplication(input: ApplicationInput, idempotencyKey: string): Promise<void> {
+export async function saveApplication(
+  input: ApplicationInput,
+  idempotencyKey: string,
+): Promise<SavedApplication> {
   const profile = deriveChildProfile(input);
+  const hash = submissionHash(idempotencyKey);
 
   try {
-    await prisma.application.create({
+    const application = await prisma.application.create({
       data: {
         visitFormat: input.visitFormat,
         individualNote: input.individualNote || null,
@@ -48,12 +57,20 @@ export async function saveApplication(input: ApplicationInput, idempotencyKey: s
         utmSource: input.source?.utmSource || null,
         utmMedium: input.source?.utmMedium || null,
         utmCampaign: input.source?.utmCampaign || null,
-        submissionHash: submissionHash(idempotencyKey),
+        submissionHash: hash,
         childProfile: { create: profile },
       },
+      select: { id: true },
     });
+    return { applicationId: application.id, created: true };
   } catch (error) {
-    if (isUniqueConstraintError(error)) return;
+    if (isUniqueConstraintError(error)) {
+      const existing = await prisma.application.findUnique({
+        where: { submissionHash: hash },
+        select: { id: true },
+      });
+      if (existing) return { applicationId: existing.id, created: false };
+    }
     throw error;
   }
 }
