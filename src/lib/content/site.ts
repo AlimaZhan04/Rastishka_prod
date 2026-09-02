@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { logServerError } from "@/lib/observability";
 
 export type SiteSettings = {
-  hero: { title: string; subtitle: string; imageAlt: string };
+  hero: { title: string; subtitle: string; imageAlt: string; imageUrl?: string };
   audience: { key: string; title: string; description: string }[];
   phone: string;
   socials: { instagram?: string; facebook?: string; threads?: string };
@@ -45,7 +45,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     facebook: "https://facebook.com/rastishka",
     threads: "https://www.threads.net/@rastishka",
   },
-  branches: [{ title: "Главный филиал", address: "г. Бишкек", lat: 42.8746, lng: 74.5698 }],
+  branches: [{ title: "Главный филиал", address: "г. Бишкек", lat: 42.8303178, lng: 74.5723253 }],
 };
 
 /** Настройки сайта (singleton) с безопасным fallback. Дедуплицируется в рамках запроса. */

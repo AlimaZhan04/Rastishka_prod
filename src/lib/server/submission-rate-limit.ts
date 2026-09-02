@@ -8,14 +8,23 @@ const attempts = new Map<string, number[]>();
  * Process-local abuse protection. It is useful in a single instance today; when the project
  * is scaled horizontally, replace this store with a shared TTL-backed rate limiter.
  */
-export function allowApplicationSubmission(identifier: string, now = Date.now()): boolean {
-  const activeAttempts = (attempts.get(identifier) ?? []).filter((at) => now - at < WINDOW_MS);
+function allowPublicSubmission(scope: string, identifier: string, now = Date.now()): boolean {
+  const key = `${scope}:${identifier}`;
+  const activeAttempts = (attempts.get(key) ?? []).filter((at) => now - at < WINDOW_MS);
   if (activeAttempts.length >= MAX_SUBMISSIONS_PER_WINDOW) {
-    attempts.set(identifier, activeAttempts);
+    attempts.set(key, activeAttempts);
     return false;
   }
 
   activeAttempts.push(now);
-  attempts.set(identifier, activeAttempts);
+  attempts.set(key, activeAttempts);
   return true;
+}
+
+export function allowApplicationSubmission(identifier: string, now = Date.now()): boolean {
+  return allowPublicSubmission("application", identifier, now);
+}
+
+export function allowVacancyResponseSubmission(identifier: string, now = Date.now()): boolean {
+  return allowPublicSubmission("vacancy-response", identifier, now);
 }

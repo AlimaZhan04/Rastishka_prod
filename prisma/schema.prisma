@@ -207,6 +207,10 @@ model VacancyResponse {
   resumeSize     Int?
   experienceText String? @db.VarChar(2000)
 
+  consentGiven   Boolean
+  consentAt      DateTime
+  consentVersion String   @default("v1")
+
   status        ResponseStatus @default(NEW)
   adminComment  String?        @db.Text
   responsibleId String?

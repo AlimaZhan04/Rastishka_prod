@@ -4,8 +4,17 @@
  */
 export function buildNewApplicationTelegramMessage(applicationId: string): string {
   return [
-    "Новая заявка с сайта «РАСтишка».",
-    `Номер заявки: ${applicationId}`,
-    "Детали анкеты хранятся в защищённой базе сайта и не пересылаются в Telegram.",
+    "📩 Новая заявка с сайта «РАСтишка»",
+    `🆔 Номер заявки: ${applicationId}`,
+    "🔒 Детали анкеты хранятся в защищённой базе сайта и не передаются в Telegram.",
+  ].join("\n");
+}
+
+/** A vacancy response has the same privacy boundary: Telegram receives only an identifier. */
+export function buildNewVacancyResponseTelegramMessage(vacancyResponseId: string): string {
+  return [
+    "💼 РАСтишка — новый отклик на вакансию»",
+    `🆔 Номер отклика: ${vacancyResponseId}`,
+    "🔐 В целях конфиденциальности данные отклика доступны только в защищённой базе сайта и не отправляются в Telegram.",
   ].join("\n");
 }

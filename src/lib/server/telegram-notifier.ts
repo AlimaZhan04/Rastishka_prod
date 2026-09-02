@@ -1,7 +1,10 @@
 import "server-only";
 
 import { prisma } from "@/lib/db";
-import { buildNewApplicationTelegramMessage } from "@/lib/telegram-message";
+import {
+  buildNewApplicationTelegramMessage,
+  buildNewVacancyResponseTelegramMessage,
+} from "@/lib/telegram-message";
 
 const TELEGRAM_API_BASE = "https://api.telegram.org";
 const TELEGRAM_TIMEOUT_MS = 10_000;
@@ -87,6 +90,42 @@ export async function notifyNewApplicationInTelegram(applicationId: string): Pro
 
   try {
     await sendTelegramMessage(config, buildNewApplicationTelegramMessage(applicationId));
+    await prisma.notificationLog.update({
+      where: { id: notification.id },
+      data: { status: "SENT" },
+    });
+    return true;
+  } catch (error) {
+    await prisma.notificationLog
+      .update({
+        where: { id: notification.id },
+        data: { status: "FAILED", error: "Telegram delivery failed", retryCount: { increment: 1 } },
+      })
+      .catch(() => undefined);
+    throw error;
+  }
+}
+
+/** Sends a minimal notification after a vacancy response has been committed. */
+export async function notifyNewVacancyResponseInTelegram(
+  vacancyResponseId: string,
+): Promise<boolean> {
+  const config = readTelegramEnvironment();
+  if (!config || !(await telegramIsEnabled())) return false;
+
+  const notification = await prisma.notificationLog.create({
+    data: {
+      eventType: "NEW_RESPONSE",
+      channel: "TELEGRAM",
+      recipient: config.chatId,
+      vacancyResponseId,
+      payload: { kind: "new_vacancy_response_reference", version: 1 },
+    },
+    select: { id: true },
+  });
+
+  try {
+    await sendTelegramMessage(config, buildNewVacancyResponseTelegramMessage(vacancyResponseId));
     await prisma.notificationLog.update({
       where: { id: notification.id },
       data: { status: "SENT" },

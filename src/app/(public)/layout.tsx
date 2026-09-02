@@ -3,9 +3,10 @@ import { PublicHeader } from "@/components/layout/public-header";
 import { Footer } from "@/components/layout/footer";
 import { AnketaModal } from "@/components/anketa/anketa-modal";
 
-export default async function PublicLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+// Contact settings are edited independently from deployments and must stay fresh.
+export const dynamic = "force-dynamic";
+
+export default async function PublicLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSiteSettings();
   return (
     <>
