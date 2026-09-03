@@ -21,9 +21,14 @@ type TelegramConfig = {
   chatId: string;
 };
 
-function readTelegramEnvironment(): TelegramConfig | null {
+async function resolveTelegramConfig(requireEnabled = true): Promise<TelegramConfig | null> {
   const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
-  const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
+  const databaseConfig = await prisma.notificationConfig.findUnique({
+    where: { id: "singleton" },
+    select: { telegramEnabled: true, telegramChatId: true },
+  });
+  if (requireEnabled && databaseConfig?.telegramEnabled === false) return null;
+  const chatId = databaseConfig?.telegramChatId?.trim() || process.env.TELEGRAM_CHAT_ID?.trim();
   return token && chatId ? { token, chatId } : null;
 }
 
@@ -61,21 +66,13 @@ async function sendTelegramMessage(config: TelegramConfig, text: string): Promis
   if (!isTelegramSuccess(payload)) throw new TelegramDeliveryError();
 }
 
-async function telegramIsEnabled(): Promise<boolean> {
-  const config = await prisma.notificationConfig.findUnique({
-    where: { id: "singleton" },
-    select: { telegramEnabled: true },
-  });
-  return config?.telegramEnabled ?? true;
-}
-
 /**
  * Sends a minimal delivery signal for a new application and writes the delivery outcome.
  * It intentionally throws on failure so the caller can log it without exposing it to the user.
  */
 export async function notifyNewApplicationInTelegram(applicationId: string): Promise<boolean> {
-  const config = readTelegramEnvironment();
-  if (!config || !(await telegramIsEnabled())) return false;
+  const config = await resolveTelegramConfig();
+  if (!config) return false;
 
   const notification = await prisma.notificationLog.create({
     data: {
@@ -110,8 +107,8 @@ export async function notifyNewApplicationInTelegram(applicationId: string): Pro
 export async function notifyNewVacancyResponseInTelegram(
   vacancyResponseId: string,
 ): Promise<boolean> {
-  const config = readTelegramEnvironment();
-  if (!config || !(await telegramIsEnabled())) return false;
+  const config = await resolveTelegramConfig();
+  if (!config) return false;
 
   const notification = await prisma.notificationLog.create({
     data: {
@@ -144,7 +141,7 @@ export async function notifyNewVacancyResponseInTelegram(
 
 /** A manually triggered connectivity check. It does not create a database record or contain PII. */
 export async function sendTelegramConnectivityTest(): Promise<void> {
-  const config = readTelegramEnvironment();
+  const config = await resolveTelegramConfig(false);
   if (!config) throw new TelegramDeliveryError();
   await sendTelegramMessage(
     config,

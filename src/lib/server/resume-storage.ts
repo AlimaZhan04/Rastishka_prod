@@ -74,3 +74,14 @@ export async function deleteResume(key: string): Promise<void> {
     // No PII or object path is emitted to logs; an orphaned private file is safer than a failed form.
   }
 }
+
+/** Produces a short-lived private download link only for an authenticated admin view. */
+export async function createResumeDownloadUrl(key: string): Promise<string | null> {
+  try {
+    const storage = getStorageClient();
+    const { data, error } = await storage.storage.from(RESUME_BUCKET).createSignedUrl(key, 60);
+    return error ? null : data.signedUrl;
+  } catch {
+    return null;
+  }
+}

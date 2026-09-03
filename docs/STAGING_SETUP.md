@@ -13,9 +13,9 @@
 
 ### Параметры bucket `resumes`
 
-Создайте bucket с точным именем `resumes` и оставьте его **приватным**. Настройте допустимые MIME-типы: `application/pdf`, `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `image/jpeg`, `image/png`; максимальный размер — 10 МБ.
+Создайте bucket с точным именем `resumes` и оставьте его **приватным**. Настройте допустимые MIME-типы: `application/pdf`, `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `image/jpeg`, `image/png`; максимальный размер — 25 МБ.
 
-Не создавайте публичную policy на чтение и не используйте public URL для резюме. Приложение загружает файл только с сервера по service-role ключу и сохраняет в БД лишь путь объекта. Выдача временной ссылки для сотрудника будет добавлена вместе с защищённой админ-панелью на этапе 4.
+Не создавайте публичную policy на чтение и не используйте public URL для резюме. Приложение загружает файл только с сервера по service-role ключу и сохраняет в БД лишь путь объекта. Авторизованный сотрудник с правом просмотра откликов получает ссылку, подписанную на 60 секунд.
 
 ## 2. Внести секреты в staging environment
 
@@ -25,7 +25,7 @@
 | --- | --- | --- |
 | БД | `DATABASE_URL`, `DIRECT_URL` | Runtime использует pooled URL; применение миграций — прямой URL. `SHADOW_DATABASE_URL` нужен только в локальном или изолированном dev-контуре для создания новых миграций. |
 | Сайт | `NEXT_PUBLIC_SITE_URL`, `ADMIN_BASE_URL` | Указать staging-домен, например `https://staging.ras-tishka.kg`. |
-| Auth | `NEXTAUTH_SECRET`, `NEXTAUTH_URL` | Секрет генерируется отдельно для staging и production. |
+| Auth | `AUTH_SECRET`, `AUTH_URL` | Секрет генерируется отдельно для staging и production. `NEXTAUTH_SECRET` и `NEXTAUTH_URL` поддерживаются для обратной совместимости. |
 | Seed | `SEED_ADMIN_LOGIN`, `SEED_ADMIN_PASSWORD`, `SEED_ADMIN_NAME` | Пароль минимум 16 символов; передавать только через secrets manager. |
 | Storage | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Service role используется только сервером. |
 | Уведомления | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`; опционально `RESEND_API_KEY`, `NOTIFY_EMAIL_FROM` | До подключения канала переменные можно оставить пустыми. |
@@ -47,6 +47,15 @@ pnpm build
 Baseline `20260830170000_init` создаёт схему на пустой staging-БД. Нельзя применять `prisma migrate reset` к staging или production: это удалит данные.
 
 Seed прекращает работу без заданного сильного пароля администратора. Контент-менеджер создаётся только при явной конфигурации его логина и пароля.
+
+### Вход и роли админ-панели
+
+После seed админ-панель доступна по `/admin/login`. Сессия хранится в подписанном JWT не более 8 часов.
+
+- `ADMIN` имеет доступ ко всем разделам, настройкам уведомлений и пользователям.
+- `CONTENT_MANAGER` управляет новостями, вакансиями и контентом сайта. Доступ к заявкам и откликам включается отдельными флагами в разделе «Пользователи».
+- Резюме остаются приватными: ссылка формируется только на защищённой странице отклика и действует 60 секунд.
+- Токен Telegram хранится только в environment secrets. В админке сохраняются включение канала и `chat_id`, там же доступен тест соединения и повтор неуспешной отправки.
 
 ## 4. Проверка готовности
 
