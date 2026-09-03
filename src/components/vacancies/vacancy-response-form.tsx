@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId, useState } from "react";
+import { startTransition, useActionState, useRef, useState, type FormEvent } from "react";
 import { CheckCircle2, Paperclip } from "lucide-react";
 import { submitVacancyResponse } from "@/app/actions/vacancy-response";
 import { Button } from "@/components/ui/button";
@@ -11,19 +11,15 @@ import {
   initialVacancyResponseSubmissionState,
   type VacancyResponseSubmissionState,
 } from "@/lib/vacancy-response-submission";
+import { formatKgPhone } from "@/lib/phone-format";
 import { validateResumeFile } from "@/lib/validation/file";
 
-function formatKgPhone(value: string): string {
-  const digits = value.replace(/\D/g, "");
-  const subscriber = (digits.startsWith("996") ? digits.slice(3) : digits).slice(0, 9);
-  const groups = [subscriber.slice(0, 3), subscriber.slice(3, 6), subscriber.slice(6, 9)].filter(
-    Boolean,
-  );
-  return groups.length ? `+996 ${groups.join(" ")}` : "+996 ";
-}
-
-function ErrorText({ message }: { message?: string }) {
-  return message ? <p className="text-destructive mt-1.5 text-sm">{message}</p> : null;
+function ErrorText({ message, id }: { message?: string; id?: string }) {
+  return message ? (
+    <p id={id} className="text-destructive mt-1.5 text-sm">
+      {message}
+    </p>
+  ) : null;
 }
 
 export function VacancyResponseForm({
@@ -33,8 +29,7 @@ export function VacancyResponseForm({
   vacancyId: string;
   sourcePage: string;
 }) {
-  const reactId = useId().replace(/[^A-Za-z0-9_-]/g, "");
-  const idempotencyKey = `vacancy_response_${reactId}`;
+  const idempotencyKeyRef = useRef<HTMLInputElement>(null);
   const [phone, setPhone] = useState("");
   const [fileError, setFileError] = useState<string>();
   const [state, formAction, isPending] = useActionState<VacancyResponseSubmissionState, FormData>(
@@ -43,10 +38,19 @@ export function VacancyResponseForm({
   );
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (idempotencyKeyRef.current && !idempotencyKeyRef.current.value) {
+      idempotencyKeyRef.current.value = `vacancy_response_${crypto.randomUUID()}`;
+    }
+    const payload = new FormData(event.currentTarget);
+    startTransition(() => formAction(payload));
+  }
+
   if (state.status === "success") {
     return (
-      <div className="bg-primary/5 rounded-2xl p-6 text-center">
-        <CheckCircle2 className="text-primary mx-auto size-11" aria-hidden="true" />
+      <div className="bg-brand-mint-soft/75 rounded-2xl p-6 text-center">
+        <CheckCircle2 className="text-brand-teal mx-auto size-11" aria-hidden="true" />
         <h2 className="font-heading text-primary mt-3 text-2xl font-bold">Отклик отправлен</h2>
         <p className="text-muted-foreground mt-2">
           Спасибо! Мы рассмотрим информацию и свяжемся с вами.
@@ -56,10 +60,10 @@ export function VacancyResponseForm({
   }
 
   return (
-    <form action={formAction} className="space-y-5" noValidate>
+    <form method="post" onSubmit={handleSubmit} className="space-y-5" noValidate>
       <input type="hidden" name="vacancyId" value={vacancyId} />
       <input type="hidden" name="sourcePage" value={sourcePage} />
-      <input type="hidden" name="idempotencyKey" value={idempotencyKey} />
+      <input ref={idempotencyKeyRef} type="hidden" name="idempotencyKey" defaultValue="" />
       <div className="hidden" aria-hidden="true">
         <Label htmlFor="vacancy-website">Не заполняйте это поле</Label>
         <Input id="vacancy-website" name="website" tabIndex={-1} autoComplete="off" />
@@ -81,7 +85,7 @@ export function VacancyResponseForm({
           aria-invalid={Boolean(fieldErrors?.name)}
           aria-describedby={fieldErrors?.name ? "response-name-error" : undefined}
         />
-        <ErrorText message={fieldErrors?.name} />
+        <ErrorText id="response-name-error" message={fieldErrors?.name} />
       </div>
 
       <div>
@@ -99,7 +103,7 @@ export function VacancyResponseForm({
           aria-invalid={Boolean(fieldErrors?.phone)}
           aria-describedby={fieldErrors?.phone ? "response-phone-error" : undefined}
         />
-        <ErrorText message={fieldErrors?.phone} />
+        <ErrorText id="response-phone-error" message={fieldErrors?.phone} />
       </div>
 
       <div>
@@ -111,6 +115,11 @@ export function VacancyResponseForm({
           type="file"
           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
           aria-invalid={Boolean(fileError || fieldErrors?.resumeFile)}
+          aria-describedby={
+            fileError || fieldErrors?.resumeFile
+              ? "resume-file-help resume-file-error"
+              : "resume-file-help"
+          }
           onChange={(event) => {
             const file = event.currentTarget.files?.[0];
             if (!file) return setFileError(undefined);
@@ -118,11 +127,14 @@ export function VacancyResponseForm({
             setFileError(validation.ok ? undefined : validation.message);
           }}
         />
-        <p className="text-muted-foreground mt-1.5 flex items-center gap-1.5 text-xs">
-          <Paperclip className="size-3.5" aria-hidden="true" /> PDF, DOC, DOCX, JPG или PNG, до 25
+        <p
+          id="resume-file-help"
+          className="text-muted-foreground mt-1.5 flex items-center gap-1.5 text-xs"
+        >
+          <Paperclip className="size-3.5" aria-hidden="true" /> PDF, DOC, DOCX, JPG или PNG, до 10
           МБ.
         </p>
-        <ErrorText message={fileError || fieldErrors?.resumeFile} />
+        <ErrorText id="resume-file-error" message={fileError || fieldErrors?.resumeFile} />
       </div>
 
       <div>
@@ -134,8 +146,9 @@ export function VacancyResponseForm({
           maxLength={2000}
           placeholder="Образование, опыт и специализация — до 2000 символов"
           aria-invalid={Boolean(fieldErrors?.experienceText)}
+          aria-describedby={fieldErrors?.experienceText ? "experience-text-error" : undefined}
         />
-        <ErrorText message={fieldErrors?.experienceText} />
+        <ErrorText id="experience-text-error" message={fieldErrors?.experienceText} />
       </div>
 
       <div>
@@ -143,8 +156,9 @@ export function VacancyResponseForm({
           <input
             type="checkbox"
             name="consent"
-            className="accent-primary mt-0.5 size-4"
+            className="accent-primary mt-0.5 size-5 shrink-0"
             aria-invalid={Boolean(fieldErrors?.consent)}
+            aria-describedby={fieldErrors?.consent ? "response-consent-error" : undefined}
           />
           <span>
             Соглашаюсь на обработку персональных данных в соответствии с{" "}
@@ -159,12 +173,12 @@ export function VacancyResponseForm({
             .
           </span>
         </Label>
-        <ErrorText message={fieldErrors?.consent} />
+        <ErrorText id="response-consent-error" message={fieldErrors?.consent} />
       </div>
 
       <Button
         type="submit"
-        className="h-11 w-full rounded-full"
+        className="h-12 w-full rounded-full"
         disabled={isPending || Boolean(fileError)}
       >
         {isPending ? "Отправляем…" : "Отправить отклик"}

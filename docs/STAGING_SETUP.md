@@ -13,7 +13,7 @@
 
 ### Параметры bucket `resumes`
 
-Создайте bucket с точным именем `resumes` и оставьте его **приватным**. Настройте допустимые MIME-типы: `application/pdf`, `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `image/jpeg`, `image/png`; максимальный размер — 25 МБ.
+Создайте bucket с точным именем `resumes` и оставьте его **приватным**. Настройте допустимые MIME-типы: `application/pdf`, `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document`, `image/jpeg`, `image/png`; максимальный размер — 10 МБ.
 
 Не создавайте публичную policy на чтение и не используйте public URL для резюме. Приложение загружает файл только с сервера по service-role ключу и сохраняет в БД лишь путь объекта. Выдача временной ссылки для сотрудника будет добавлена вместе с защищённой админ-панелью на этапе 4.
 

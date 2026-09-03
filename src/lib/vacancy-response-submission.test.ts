@@ -56,7 +56,7 @@ describe("vacancy response payload", () => {
         type: "application/pdf",
         size: MAX_RESUME_BYTES + 1,
       }),
-    ).toMatchObject({ ok: false, message: "Размер файла не должен превышать 25 МБ" });
+    ).toMatchObject({ ok: false, message: "Размер файла не должен превышать 10 МБ" });
     expect(validateResumeFile({ name: "resume.pdf", type: "image/png", size: 100 })).toMatchObject({
       ok: false,
       message: "Тип файла не соответствует его расширению",

@@ -25,7 +25,7 @@ export function SocialLinks({ socials, className }: { socials: Socials; classNam
             target="_blank"
             rel="noopener noreferrer"
             aria-label={label}
-            className="grid size-9 place-items-center rounded-full bg-secondary text-primary transition-colors hover:bg-accent"
+            className="bg-secondary text-primary hover:bg-brand-mint-soft hover:text-brand-teal focus-visible:ring-ring/40 grid size-11 place-items-center rounded-full transition-[transform,background-color,color] duration-200 hover:-translate-y-0.5 focus-visible:ring-3 focus-visible:outline-none"
           >
             <Icon className="size-4" />
           </a>

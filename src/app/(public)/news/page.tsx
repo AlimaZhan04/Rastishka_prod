@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NewsCard } from "@/components/content/news-card";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { PageIntro } from "@/components/layout/page-intro";
 import { listPublishedNews } from "@/lib/content/news";
 
 export const metadata: Metadata = {
@@ -12,25 +13,37 @@ export default async function NewsPage() {
   const news = await listPublishedNews();
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12 md:py-16">
-      <Breadcrumbs items={[{ label: "Новости" }]} />
-      <p className="text-primary text-sm font-semibold tracking-wide uppercase">Жизнь РАСтишки</p>
-      <h1 className="font-heading text-primary mt-1 text-4xl font-extrabold">Новости</h1>
-      <p className="text-muted-foreground mt-4 max-w-2xl">
-        Рассказываем о занятиях, событиях и важных изменениях в нашем детском саду.
-      </p>
+    <>
+      <PageIntro
+        eyebrow="Жизнь РАСтишки"
+        title="Новости и объявления"
+        description="Рассказываем о занятиях, событиях и важных изменениях в нашем детском саду."
+      >
+        <Breadcrumbs items={[{ label: "Новости" }]} />
+      </PageIntro>
 
-      {news.length ? (
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {news.map((item) => (
-            <NewsCard key={item.slug} item={item} />
-          ))}
-        </div>
-      ) : (
-        <p className="bg-muted text-muted-foreground mt-8 rounded-xl p-5">
-          Пока нет опубликованных новостей.
-        </p>
-      )}
-    </section>
+      <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6 sm:py-16 lg:px-8">
+        {news.length ? (
+          <div className="grid gap-5 lg:grid-cols-[1.18fr_0.82fr]">
+            {news.map((item, index) => (
+              <NewsCard
+                key={item.slug}
+                item={item}
+                featured={index === 0}
+                headingLevel={2}
+                eagerImage={index === 0}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="border-brand-mint/35 shadow-soft mx-auto max-w-2xl rounded-[1.6rem] border bg-white/80 p-8 text-center">
+            <p className="font-heading text-primary text-xl font-bold">Новости скоро появятся</p>
+            <p className="text-muted-foreground mt-2 leading-7">
+              Мы готовим истории о занятиях и событиях. А пока загляните в наши социальные сети.
+            </p>
+          </div>
+        )}
+      </section>
+    </>
   );
 }

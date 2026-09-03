@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-/** Резюме: pdf/doc/docx/jpg/png, до 25 МБ (FR-VAC-06). */
+/** Резюме: pdf/doc/docx/jpg/png, до 10 МБ (финальное ТЗ v1.1). */
 export const ALLOWED_RESUME_MIME = [
   "application/pdf",
   "application/msword",
@@ -8,7 +8,7 @@ export const ALLOWED_RESUME_MIME = [
   "image/jpeg",
   "image/png",
 ] as const;
-export const MAX_RESUME_BYTES = 25 * 1024 * 1024;
+export const MAX_RESUME_BYTES = 10 * 1024 * 1024;
 
 /** Изображения контента: jpg/png/webp (ТЗ §9, FR-NEWS-08). */
 export const ALLOWED_IMAGE_MIME = ["image/jpeg", "image/png", "image/webp"] as const;
@@ -39,7 +39,7 @@ export function validateResumeFile(file: UploadedFileDescriptor): ResumeFileVali
     return { ok: false, message: "Выберите файл резюме" };
   }
   if (file.size > MAX_RESUME_BYTES) {
-    return { ok: false, message: "Размер файла не должен превышать 25 МБ" };
+    return { ok: false, message: "Размер файла не должен превышать 10 МБ" };
   }
 
   const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
@@ -61,7 +61,7 @@ export const resumeFileMetaSchema = z.object({
   key: z.string().min(1),
   fileName: z.string().min(1),
   mimeType: z.enum(ALLOWED_RESUME_MIME),
-  size: z.number().int().positive().max(MAX_RESUME_BYTES, "Файл больше 25 МБ"),
+  size: z.number().int().positive().max(MAX_RESUME_BYTES, "Файл больше 10 МБ"),
 });
 
 export type ResumeFileMeta = z.infer<typeof resumeFileMetaSchema>;

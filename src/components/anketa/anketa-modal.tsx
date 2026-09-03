@@ -1,17 +1,19 @@
 "use client";
 
-import { useActionState, useEffect, useId, useRef, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { useForm, useWatch, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { submitApplication } from "@/app/actions/application";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,7 +30,9 @@ import {
   initialApplicationSubmissionState,
   type ApplicationInput,
 } from "@/lib/application-submission";
+import { formatKgPhone } from "@/lib/phone-format";
 import { applicationSchema, stepSchemas, TOTAL_STEPS } from "@/lib/validation/application";
+import { BrandMark, DoodleHeart } from "@/components/brand/brand-motifs";
 
 const emptyValues: ApplicationInput = {
   visitFormat: "FULL_DAY",
@@ -53,15 +57,13 @@ type OptionProps = {
 
 function RadioOption({ label, value, checked, ...props }: Omit<OptionProps, "error">) {
   return (
-    <label
-      className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted/40 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
-    >
+    <label className="group/option border-border hover:border-brand-mint has-[:checked]:border-primary/55 has-[:checked]:bg-secondary/75 flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border bg-white/72 p-3.5 text-sm transition-[transform,background-color,border-color,box-shadow] duration-200 hover:-translate-y-0.5 has-[:checked]:shadow-sm sm:text-base">
       <input
         {...props}
         value={value}
         checked={checked}
         type="radio"
-        className="mt-0.5 size-4 accent-primary"
+        className="accent-primary size-5 shrink-0"
       />
       <span>{label}</span>
     </label>
@@ -70,15 +72,13 @@ function RadioOption({ label, value, checked, ...props }: Omit<OptionProps, "err
 
 function CheckboxOption({ label, value, checked, error, ...props }: OptionProps) {
   return (
-    <label
-      className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 text-sm transition-colors hover:bg-muted/40 has-[:checked]:border-primary has-[:checked]:bg-primary/5"
-    >
+    <label className="group/option border-border hover:border-brand-mint has-[:checked]:border-brand-teal/60 has-[:checked]:bg-brand-mint-soft/80 flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border bg-white/72 p-3.5 text-sm transition-[transform,background-color,border-color,box-shadow] duration-200 hover:-translate-y-0.5 has-[:checked]:shadow-sm sm:text-base">
       <input
         {...props}
         value={value}
         checked={checked}
         type="checkbox"
-        className="mt-0.5 size-4 accent-primary"
+        className="accent-primary size-5 shrink-0"
         aria-invalid={Boolean(error)}
       />
       <span>{label}</span>
@@ -86,8 +86,12 @@ function CheckboxOption({ label, value, checked, error, ...props }: OptionProps)
   );
 }
 
-function ErrorText({ message }: { message?: string }) {
-  return message ? <p className="mt-2 text-sm text-destructive">{message}</p> : null;
+function ErrorText({ message, id }: { message?: string; id?: string }) {
+  return message ? (
+    <p id={id} className="text-destructive mt-2 text-sm" role="alert">
+      {message}
+    </p>
+  ) : null;
 }
 
 function AnketaForm() {
@@ -95,8 +99,7 @@ function AnketaForm() {
   const selectedVisitFormat = useAnketa((state) => state.visitFormat);
   const source = useAnketa((state) => state.source);
   const formRef = useRef<HTMLFormElement>(null);
-  const formId = useId().replace(/[^A-Za-z0-9_-]/g, "");
-  const idempotencyKey = `application_form_${formId}`;
+  const idempotencyKeyRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
   const [state, formAction, isPending] = useActionState(
     submitApplication,
@@ -114,6 +117,7 @@ function AnketaForm() {
   const toilet = useWatch({ control: form.control, name: "toilet" });
   const food = useWatch({ control: form.control, name: "food" });
   const previousExperience = useWatch({ control: form.control, name: "previousExperience" });
+  const phoneField = form.register("phone");
 
   useEffect(() => {
     if (state.status !== "error" || !state.fieldErrors) return;
@@ -127,12 +131,19 @@ function AnketaForm() {
     form.clearErrors();
     if (result.success) return true;
 
+    let firstInvalidField: FieldPath<ApplicationInput> | undefined;
     for (const issue of result.error.issues) {
       const field = issue.path[0];
       if (typeof field === "string") {
-        form.setError(field as FieldPath<ApplicationInput>, { type: "validate", message: issue.message });
+        const fieldPath = field as FieldPath<ApplicationInput>;
+        firstInvalidField ??= fieldPath;
+        form.setError(fieldPath, {
+          type: "validate",
+          message: issue.message,
+        });
       }
     }
+    if (firstInvalidField) form.setFocus(firstInvalidField);
     return false;
   }
 
@@ -146,17 +157,29 @@ function AnketaForm() {
     formRef.current?.requestSubmit();
   }
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (idempotencyKeyRef.current && !idempotencyKeyRef.current.value) {
+      idempotencyKeyRef.current.value = `application_${crypto.randomUUID()}`;
+    }
+    const payload = new FormData(event.currentTarget);
+    startTransition(() => formAction(payload));
+  }
+
   if (state.status === "success") {
     return (
-      <div className="flex min-h-80 flex-col items-center justify-center gap-5 px-6 py-10 text-center">
-        <CheckCircle2 className="size-12 text-primary" aria-hidden="true" />
+      <div className="relative flex min-h-[28rem] flex-col items-center justify-center gap-5 overflow-hidden px-6 py-10 text-center">
+        <DoodleHeart className="text-brand-pink/70 absolute top-8 right-8 size-14 rotate-12" />
+        <span className="bg-brand-mint-soft text-brand-teal grid size-20 place-items-center rounded-full">
+          <CheckCircle2 className="size-11" aria-hidden="true" />
+        </span>
         <div className="space-y-2">
           <DialogTitle>Анкета отправлена</DialogTitle>
           <DialogDescription>
             Спасибо! Мы сохранили ответы и свяжемся с вами после их просмотра.
           </DialogDescription>
         </div>
-        <Button type="button" onClick={close}>
+        <Button type="button" onClick={close} className="rounded-full px-6">
           Закрыть
         </Button>
       </div>
@@ -164,8 +187,13 @@ function AnketaForm() {
   }
 
   return (
-    <form ref={formRef} action={formAction} className="flex min-h-100 flex-col">
-      <input type="hidden" name="idempotencyKey" value={idempotencyKey} />
+    <form
+      ref={formRef}
+      method="post"
+      onSubmit={handleSubmit}
+      className="flex min-h-[min(42rem,calc(100dvh-1rem))] flex-col sm:min-h-[min(34rem,calc(100dvh-1rem))]"
+    >
+      <input ref={idempotencyKeyRef} type="hidden" name="idempotencyKey" defaultValue="" />
       <input type="hidden" name="sourcePage" value={source?.page ?? ""} />
       <input type="hidden" name="sourceCta" value={source?.cta ?? ""} />
       <input type="hidden" name="utmSource" value={source?.utmSource ?? ""} />
@@ -176,33 +204,66 @@ function AnketaForm() {
         <Input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="border-b px-5 py-4">
+      <div className="border-border/65 from-brand-mint-soft/70 to-secondary/65 relative border-b bg-gradient-to-r via-white/90 px-5 py-4 sm:px-7 sm:py-5">
+        <DoodleHeart className="text-brand-pink/55 absolute top-3 right-14 size-9 rotate-12" />
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <DialogTitle>Предварительная анкета</DialogTitle>
-            <DialogDescription className="mt-1">
-              Шаг {step} из {TOTAL_STEPS}
-            </DialogDescription>
+          <div className="flex items-center gap-3">
+            <BrandMark className="text-primary h-12 w-11" />
+            <div>
+              <DialogTitle className="text-primary text-lg font-bold">
+                Предварительная анкета
+              </DialogTitle>
+              <DialogDescription className="text-brand-teal mt-0.5 font-medium">
+                Шаг {step} из {TOTAL_STEPS}
+              </DialogDescription>
+            </div>
           </div>
-          <Button type="button" variant="ghost" size="icon-sm" onClick={close} aria-label="Закрыть анкету">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={close}
+            aria-label="Закрыть анкету"
+          >
             <X aria-hidden="true" />
           </Button>
         </div>
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-          <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} />
+        <div
+          className="mt-4 grid grid-cols-7 gap-1.5"
+          role="progressbar"
+          aria-label={`Шаг ${step} из ${TOTAL_STEPS}`}
+          aria-valuemin={1}
+          aria-valuemax={TOTAL_STEPS}
+          aria-valuenow={step}
+        >
+          {Array.from({ length: TOTAL_STEPS }, (_, index) => (
+            <span
+              key={index}
+              className={`h-1.5 rounded-full transition-colors duration-300 ${index < step ? "bg-primary" : "bg-white/85"}`}
+              aria-hidden="true"
+            />
+          ))}
         </div>
       </div>
 
-      <div className="flex-1 px-5 py-5">
+      <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-7 sm:py-7">
         {state.status === "error" && (
-          <p className="mb-4 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+          <p
+            className="bg-destructive/10 text-destructive mb-4 rounded-lg px-3 py-2 text-sm"
+            role="alert"
+          >
             {state.message}
           </p>
         )}
 
-        <div hidden={step !== 1}>
-          <fieldset className="space-y-3">
-            <legend className="text-base font-medium">Какой формат посещения вам удобен?</legend>
+        <div hidden={step !== 1} className={step === 1 ? "motion-step-in" : undefined}>
+          <fieldset
+            className="space-y-3"
+            aria-describedby={errors.visitFormat ? "visit-format-error" : undefined}
+          >
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Какой формат посещения вам удобен?
+            </legend>
             {VISIT_FORMATS.map((option) => (
               <RadioOption
                 key={option.value}
@@ -221,18 +282,24 @@ function AnketaForm() {
                   maxLength={200}
                   placeholder="Например, удобные дни и время"
                   aria-invalid={Boolean(errors.individualNote)}
+                  aria-describedby={errors.individualNote ? "individual-note-error" : undefined}
                   {...form.register("individualNote")}
                 />
-                <ErrorText message={errors.individualNote?.message} />
+                <ErrorText id="individual-note-error" message={errors.individualNote?.message} />
               </div>
             )}
-            <ErrorText message={errors.visitFormat?.message} />
+            <ErrorText id="visit-format-error" message={errors.visitFormat?.message} />
           </fieldset>
         </div>
 
-        <div hidden={step !== 2}>
-          <fieldset className="space-y-3">
-            <legend className="text-base font-medium">Как развивается речь ребёнка?</legend>
+        <div hidden={step !== 2} className={step === 2 ? "motion-step-in" : undefined}>
+          <fieldset
+            className="space-y-3"
+            aria-describedby={errors.speech ? "speech-error" : undefined}
+          >
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Как развивается речь ребёнка?
+            </legend>
             {SPEECH_OPTIONS.map((option) => (
               <RadioOption
                 key={option.value}
@@ -242,13 +309,18 @@ function AnketaForm() {
                 {...form.register("speech")}
               />
             ))}
-            <ErrorText message={errors.speech?.message} />
+            <ErrorText id="speech-error" message={errors.speech?.message} />
           </fieldset>
         </div>
 
-        <div hidden={step !== 3}>
-          <fieldset className="space-y-3">
-            <legend className="text-base font-medium">Есть ли особенности поведения?</legend>
+        <div hidden={step !== 3} className={step === 3 ? "motion-step-in" : undefined}>
+          <fieldset
+            className="space-y-3"
+            aria-describedby={errors.behavior ? "behavior-error" : undefined}
+          >
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Есть ли особенности поведения?
+            </legend>
             {BEHAVIOR_OPTIONS.map((option) => (
               <RadioOption
                 key={option.value}
@@ -267,18 +339,24 @@ function AnketaForm() {
                   maxLength={200}
                   placeholder="Коротко опишите ситуацию"
                   aria-invalid={Boolean(errors.behaviorNote)}
+                  aria-describedby={errors.behaviorNote ? "behavior-note-error" : undefined}
                   {...form.register("behaviorNote")}
                 />
-                <ErrorText message={errors.behaviorNote?.message} />
+                <ErrorText id="behavior-note-error" message={errors.behaviorNote?.message} />
               </div>
             )}
-            <ErrorText message={errors.behavior?.message} />
+            <ErrorText id="behavior-error" message={errors.behavior?.message} />
           </fieldset>
         </div>
 
-        <div hidden={step !== 4}>
-          <fieldset className="space-y-3">
-            <legend className="text-base font-medium">Как обстоят дела с туалетом?</legend>
+        <div hidden={step !== 4} className={step === 4 ? "motion-step-in" : undefined}>
+          <fieldset
+            className="space-y-3"
+            aria-describedby={errors.toilet ? "toilet-error" : undefined}
+          >
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Как обстоят дела с туалетом?
+            </legend>
             {TOILET_OPTIONS.map((option) => (
               <RadioOption
                 key={option.value}
@@ -288,13 +366,18 @@ function AnketaForm() {
                 {...form.register("toilet")}
               />
             ))}
-            <ErrorText message={errors.toilet?.message} />
+            <ErrorText id="toilet-error" message={errors.toilet?.message} />
           </fieldset>
         </div>
 
-        <div hidden={step !== 5}>
-          <fieldset className="space-y-3">
-            <legend className="text-base font-medium">Какие навыки питания есть? Можно выбрать несколько.</legend>
+        <div hidden={step !== 5} className={step === 5 ? "motion-step-in" : undefined}>
+          <fieldset className="space-y-3" aria-describedby={errors.food ? "food-error" : undefined}>
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Какие навыки питания есть?
+            </legend>
+            <p className="text-muted-foreground -mt-2 mb-4 text-sm">
+              Можно выбрать несколько вариантов.
+            </p>
             {FOOD_OPTIONS.map((option) => (
               <CheckboxOption
                 key={option.value}
@@ -305,13 +388,18 @@ function AnketaForm() {
                 {...form.register("food")}
               />
             ))}
-            <ErrorText message={errors.food?.message} />
+            <ErrorText id="food-error" message={errors.food?.message} />
           </fieldset>
         </div>
 
-        <div hidden={step !== 6}>
-          <fieldset className="space-y-3">
-            <legend className="text-base font-medium">Был ли опыт занятий?</legend>
+        <div hidden={step !== 6} className={step === 6 ? "motion-step-in" : undefined}>
+          <fieldset
+            className="space-y-3"
+            aria-describedby={errors.previousExperience ? "experience-error" : undefined}
+          >
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Был ли опыт занятий?
+            </legend>
             {EXPERIENCE_OPTIONS.map((option) => (
               <RadioOption
                 key={option.value}
@@ -321,13 +409,15 @@ function AnketaForm() {
                 {...form.register("previousExperience")}
               />
             ))}
-            <ErrorText message={errors.previousExperience?.message} />
+            <ErrorText id="experience-error" message={errors.previousExperience?.message} />
           </fieldset>
         </div>
 
-        <div hidden={step !== 7}>
+        <div hidden={step !== 7} className={step === 7 ? "motion-step-in" : undefined}>
           <fieldset className="space-y-4">
-            <legend className="text-base font-medium">Как с вами связаться?</legend>
+            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+              Как с вами связаться?
+            </legend>
             <div>
               <Label htmlFor="parentName">Ваше имя</Label>
               <Input
@@ -335,9 +425,10 @@ function AnketaForm() {
                 className="mt-2"
                 autoComplete="name"
                 aria-invalid={Boolean(errors.parentName)}
+                aria-describedby={errors.parentName ? "parent-name-error" : undefined}
                 {...form.register("parentName")}
               />
-              <ErrorText message={errors.parentName?.message} />
+              <ErrorText id="parent-name-error" message={errors.parentName?.message} />
             </div>
             <div>
               <Label htmlFor="phone">Телефон</Label>
@@ -349,44 +440,61 @@ function AnketaForm() {
                 autoComplete="tel"
                 placeholder="+996 XXX XXX XXX"
                 aria-invalid={Boolean(errors.phone)}
-                {...form.register("phone")}
+                aria-describedby={errors.phone ? "phone-error" : undefined}
+                {...phoneField}
+                onChange={(event) => {
+                  event.target.value = formatKgPhone(event.target.value);
+                  void phoneField.onChange(event);
+                }}
               />
-              <ErrorText message={errors.phone?.message} />
+              <ErrorText id="phone-error" message={errors.phone?.message} />
             </div>
-            <Label className="items-start gap-3 rounded-lg border border-border p-3 text-sm font-normal leading-5">
+            <Label className="border-border items-start gap-3 rounded-lg border p-3 text-sm leading-5 font-normal">
               <input
                 type="checkbox"
-                className="mt-0.5 size-4 accent-primary"
+                className="accent-primary mt-0.5 size-4"
                 aria-invalid={Boolean(errors.consent)}
+                aria-describedby={errors.consent ? "consent-error" : undefined}
                 {...form.register("consent")}
               />
               <span>
                 Соглашаюсь на обработку персональных данных в соответствии с{" "}
-                <a className="text-primary underline underline-offset-2" href="/privacy" target="_blank" rel="noreferrer">
+                <a
+                  className="text-primary underline underline-offset-2"
+                  href="/privacy"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   проектом политики
                 </a>
                 .
               </span>
             </Label>
-            <ErrorText message={errors.consent?.message} />
+            <ErrorText id="consent-error" message={errors.consent?.message} />
           </fieldset>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-3 border-t px-5 py-4">
+      <div className="border-border/65 sticky bottom-0 flex items-center justify-between gap-3 border-t bg-white/92 px-5 py-4 backdrop-blur-sm sm:px-7">
         {step > 1 ? (
-          <Button type="button" variant="outline" onClick={() => setStep((current) => current - 1)} disabled={isPending}>
+          <Button
+            type="button"
+            variant="outline"
+            className="rounded-full"
+            onClick={() => setStep((current) => current - 1)}
+            disabled={isPending}
+          >
             <ChevronLeft aria-hidden="true" /> Назад
           </Button>
         ) : (
           <span />
         )}
         {step < TOTAL_STEPS ? (
-          <Button type="button" onClick={nextStep}>
+          <Button type="button" className="min-w-32 rounded-full" onClick={nextStep}>
             Далее <ChevronRight aria-hidden="true" />
           </Button>
         ) : (
-          <Button type="button" onClick={sendForm} disabled={isPending}>
+          <Button type="button" className="rounded-full" onClick={sendForm} disabled={isPending}>
             {isPending ? "Отправляем…" : "Отправить анкету"}
           </Button>
         )}
@@ -401,7 +509,10 @@ export function AnketaModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-h-[calc(100dvh-2rem)] max-w-lg overflow-y-auto p-0 sm:max-w-lg" showCloseButton={false}>
+      <DialogContent
+        className="bg-background max-h-[calc(100dvh-1rem)] max-w-[calc(100%-1rem)] overflow-hidden rounded-[1.75rem] border border-white/85 p-0 shadow-[0_28px_80px_-28px_rgba(42,26,30,0.55)] sm:max-w-2xl"
+        showCloseButton={false}
+      >
         {isOpen && <AnketaForm />}
       </DialogContent>
     </Dialog>

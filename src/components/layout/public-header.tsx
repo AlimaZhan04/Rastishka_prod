@@ -10,6 +10,7 @@ import { PhoneLink } from "@/components/brand/phone-link";
 import { AnketaTrigger } from "@/components/anketa/anketa-trigger";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 type Socials = { instagram?: string; facebook?: string; threads?: string };
 
@@ -32,8 +33,8 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
   }
 
   return (
-    <header className="border-border/60 bg-background/85 sticky top-0 z-40 border-b backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+    <header className="border-border/55 bg-background/88 sticky top-0 z-40 border-b shadow-[0_10px_30px_-28px_rgba(126,42,61,0.55)] backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.75rem] max-w-7xl items-center justify-between gap-4 px-5 sm:px-6 lg:h-21 lg:px-8">
         <div className="flex min-w-0 items-center gap-1.5">
           {canGoBack ? (
             <Button type="button" variant="ghost" size="icon" onClick={goBack} aria-label="Назад">
@@ -44,7 +45,7 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
         </div>
 
         {/* Desktop: соцсети, телефон, CTA (FR-COM-02) */}
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-5 lg:flex">
           <SocialLinks socials={socials} />
           <PhoneLink phone={phone} />
           <AnketaTrigger ctaSource="header" className="h-10 rounded-full px-5">
@@ -53,13 +54,16 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
         </div>
 
         {/* Mobile: burger-меню */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger render={<Button variant="ghost" size="icon" aria-label="Открыть меню" />}>
-              <Menu className="size-5" />
+              <Menu className="size-6" aria-hidden="true" />
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
-              <SheetHeader>
+            <SheetContent
+              side="right"
+              className="border-l-brand-mint/40 bg-background w-[min(88vw,22rem)]"
+            >
+              <SheetHeader className="border-border/60 border-b pb-5">
                 <SheetTitle>
                   <Logo />
                 </SheetTitle>
@@ -71,7 +75,21 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="text-foreground hover:bg-secondary rounded-lg px-3 py-2.5 text-base font-medium transition-colors"
+                    aria-current={
+                      item.href === "/"
+                        ? pathname === "/"
+                          ? "page"
+                          : undefined
+                        : pathname.startsWith(item.href)
+                          ? "page"
+                          : undefined
+                    }
+                    className={cn(
+                      "text-foreground min-h-11 rounded-xl px-3.5 py-3 text-base font-semibold transition-colors",
+                      (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href))
+                        ? "bg-brand-mint-soft text-brand-teal"
+                        : "hover:bg-secondary",
+                    )}
                   >
                     {item.label}
                   </Link>

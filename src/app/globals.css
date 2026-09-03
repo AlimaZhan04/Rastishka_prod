@@ -4,7 +4,8 @@
 /*
   Дизайн-система «РАСтишка».
   Бренд-палитра: бордо #7E2A3D, пыльно-розовый #F2C4CB, бледно-розовый #F8E3E6,
-  шалфейно-оливковый #838B72, кремовый #F7F1EA. Скругления 20–28px, мягкие тени.
+  мятный #9CCFC4, тёмный бирюзовый #2F766D, шалфейно-оливковый #838B72,
+  кремовый #F7F1EA. Скругления 20–28px, мягкие тени.
   Одна светлая тема (без dark mode в MVP).
 */
 
@@ -56,6 +57,13 @@
   --chart-3: #f2c4cb;
   --chart-4: #c98a96;
   --chart-5: #b5bfa1;
+
+  /* motion */
+  --motion-fast: 160ms;
+  --motion-base: 260ms;
+  --motion-slow: 480ms;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @theme inline {
@@ -101,6 +109,9 @@
   --color-brand-rose: #f8e3e6;
   --color-brand-sage: #838b72;
   --color-brand-cream: #f7f1ea;
+  --color-brand-mint: #9ccfc4;
+  --color-brand-mint-soft: #d9eee9;
+  --color-brand-teal: #2c6f66;
 
   /* radius scale derived from --radius */
   --radius-sm: calc(var(--radius) - 8px);
@@ -119,10 +130,26 @@
   }
 
   body {
-    background-color: var(--background);
+    background:
+      radial-gradient(circle at 8% 18%, rgba(217, 238, 233, 0.55), transparent 24rem),
+      radial-gradient(circle at 92% 10%, rgba(248, 227, 230, 0.65), transparent 26rem),
+      var(--background);
     color: var(--foreground);
     font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-brand-mint);
+    color: var(--foreground);
+  }
+
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    touch-action: manipulation;
   }
 
   h1,
@@ -135,7 +162,102 @@
 }
 
 @utility shadow-soft {
-  box-shadow: 0 12px 30px -12px rgba(126, 42, 61, 0.18);
+  box-shadow:
+    0 18px 42px -24px rgba(126, 42, 61, 0.28),
+    0 8px 18px -14px rgba(47, 118, 109, 0.18);
+}
+
+@utility shadow-card-hover {
+  box-shadow:
+    0 26px 56px -28px rgba(126, 42, 61, 0.32),
+    0 12px 24px -18px rgba(47, 118, 109, 0.28);
+}
+
+@keyframes brand-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes brand-scale-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.965);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes brand-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--float-rotate, 0deg));
+  }
+  50% {
+    transform: translate3d(0, -7px, 0) rotate(var(--float-rotate, 0deg));
+  }
+}
+
+@keyframes brand-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.motion-rise {
+  animation: brand-rise var(--motion-slow) var(--ease-out-soft) both;
+}
+
+.motion-scale-in {
+  animation: brand-scale-in 560ms var(--ease-out-soft) both;
+}
+
+.motion-float {
+  animation: brand-float 6.5s ease-in-out 2 both;
+}
+
+.motion-step-in {
+  animation: brand-step-in var(--motion-base) var(--ease-out-soft) both;
+}
+
+.motion-delay-1 {
+  animation-delay: 70ms;
+}
+
+.motion-delay-2 {
+  animation-delay: 140ms;
+}
+
+.motion-delay-3 {
+  animation-delay: 210ms;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-on-scroll {
+      animation: brand-rise 1ms var(--ease-out-soft) both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 24%;
+    }
+
+    .reveal-scale-on-scroll {
+      animation: brand-scale-in 1ms var(--ease-out-soft) both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 22%;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -145,5 +267,6 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

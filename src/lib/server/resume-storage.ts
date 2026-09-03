@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { fileTypeFromBuffer } from "file-type";
 import { validateResumeFile, type ResumeFileMeta } from "@/lib/validation/file";
+import { isDetectedResumeTypeCompatible } from "@/lib/validation/resume-content";
 
 const RESUME_BUCKET = "resumes";
 
@@ -30,13 +31,6 @@ function getStorageClient() {
   });
 }
 
-function isDetectedTypeCompatible(file: File, detectedMime: string): boolean {
-  const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
-  if (extension === ".docx") return detectedMime === "application/zip";
-  if (extension === ".doc") return detectedMime === "application/x-cfb";
-  return detectedMime === file.type;
-}
-
 /** Uploads to a private bucket; no public URL is created or returned. */
 export async function uploadResume(file: File, vacancyId: string): Promise<ResumeFileMeta> {
   const validation = validateResumeFile(file);
@@ -44,7 +38,13 @@ export async function uploadResume(file: File, vacancyId: string): Promise<Resum
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const detected = await fileTypeFromBuffer(buffer);
-  if (detected && !isDetectedTypeCompatible(file, detected.mime)) {
+  if (
+    !isDetectedResumeTypeCompatible({
+      extension: validation.extension,
+      declaredMime: file.type,
+      detectedMime: detected?.mime,
+    })
+  ) {
     throw new InvalidResumeContentError();
   }
 

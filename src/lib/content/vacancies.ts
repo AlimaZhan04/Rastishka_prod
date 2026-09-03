@@ -45,6 +45,22 @@ export const listPublishedVacancies = cache(async (): Promise<PublicVacancy[]> =
   }
 });
 
+/** All public vacancy slugs are used by sitemap.xml and are intentionally not list-capped. */
+export const listPublishedVacancySlugs = cache(async (): Promise<{ slug: string }[]> => {
+  try {
+    return await prisma.vacancy.findMany({
+      where: { status: "PUBLISHED" },
+      select: { slug: true },
+      orderBy: [{ sortOrder: "asc" }, { publishedAt: "desc" }],
+    });
+  } catch (error) {
+    logServerError("vacancies.sitemap_failed", error, {
+      operation: "list_published_vacancy_slugs",
+    });
+    return [];
+  }
+});
+
 export const getPublishedVacancyBySlug = cache(
   async (slug: string): Promise<PublicVacancy | null> => {
     try {

@@ -10,8 +10,16 @@ export default async function PublicLayout({ children }: Readonly<{ children: Re
   const settings = await getSiteSettings();
   return (
     <>
+      <a
+        href="#main-content"
+        className="focus:ring-ring/50 bg-primary text-primary-foreground fixed top-3 left-4 z-[100] -translate-y-20 rounded-full px-4 py-2.5 font-semibold shadow-lg transition-transform focus:translate-y-0 focus:ring-3 focus:outline-none"
+      >
+        К основному содержанию
+      </a>
       <PublicHeader phone={settings.phone} socials={settings.socials} />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+        {children}
+      </main>
       <Footer phone={settings.phone} socials={settings.socials} />
       <AnketaModal />
     </>
