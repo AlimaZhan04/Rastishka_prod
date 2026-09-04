@@ -8,10 +8,10 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    // Миграции/CLI используют прямое подключение (в проде Supabase — не через PgBouncer).
+    // Миграции/CLI используют прямое подключение к PostgreSQL, без transaction pooler.
     // Локально DIRECT_URL == DATABASE_URL.
     url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
-    // Shadow DB для `migrate dev` (локально — отдельный порт Prisma Dev; в проде — Supabase создаёт сам).
+    // Shadow DB нужна только для локального migrate dev; migrate deploy её не использует.
     shadowDatabaseUrl: process.env["SHADOW_DATABASE_URL"],
   },
 });

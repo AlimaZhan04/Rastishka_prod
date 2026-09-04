@@ -7,12 +7,7 @@ import {
   type VacancyResponseSubmissionState,
 } from "@/lib/vacancy-response-submission";
 import { logServerError } from "@/lib/observability";
-import {
-  deleteResume,
-  InvalidResumeContentError,
-  ResumeStorageUnavailableError,
-  uploadResume,
-} from "@/lib/server/resume-storage";
+import { InvalidResumeContentError, prepareResume } from "@/lib/server/resume-storage";
 import {
   assertVacancyIsPublished,
   saveVacancyResponse,
@@ -53,17 +48,11 @@ export async function submitVacancyResponse(
     };
   }
 
-  let resumeKey: string | undefined;
   try {
     await assertVacancyIsPublished(parsed.data.vacancyId);
-    const resume = parsed.file ? await uploadResume(parsed.file, parsed.data.vacancyId) : undefined;
-    resumeKey = resume?.key;
+    const resume = parsed.file ? await prepareResume(parsed.file) : undefined;
     const saved = await saveVacancyResponse({ ...parsed.data, resume }, guard.idempotencyKey);
 
-    if (!saved.created && resumeKey) {
-      await deleteResume(resumeKey);
-      resumeKey = undefined;
-    }
     if (saved.created) {
       try {
         await notifyNewVacancyResponseInTelegram(saved.vacancyResponseId);
@@ -75,15 +64,6 @@ export async function submitVacancyResponse(
     }
     return { status: "success" };
   } catch (error) {
-    if (resumeKey) await deleteResume(resumeKey);
-    if (error instanceof ResumeStorageUnavailableError) {
-      return {
-        status: "error",
-        message:
-          "Загрузка файла пока недоступна. Опишите опыт работы в текстовом поле и отправьте отклик без файла.",
-        fieldErrors: { resumeFile: "Загрузка резюме временно недоступна" },
-      };
-    }
     if (error instanceof InvalidResumeContentError) {
       return {
         status: "error",

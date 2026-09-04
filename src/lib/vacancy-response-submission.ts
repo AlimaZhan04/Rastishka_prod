@@ -51,9 +51,9 @@ function selectedResume(formData: FormData): {
 
   return {
     file: candidate,
-    // The object key is assigned only after the private storage upload succeeds.
+    // The real file ID and validated bytes are assigned on the server before persistence.
     meta: {
-      key: "pending-upload",
+      key: "pending-validation",
       fileName: candidate.name,
       mimeType: candidate.type as ResumeFileMeta["mimeType"],
       size: candidate.size,

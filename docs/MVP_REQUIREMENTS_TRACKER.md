@@ -78,8 +78,8 @@
 | FR-VAC-03 | P0 | Карточка вакансии и безопасное превью | Основа есть | 3 | Frontend | На проверке | — | browser smoke |
 | FR-VAC-04 | P0 | Полная карточка: обязанности, требования, условия | Основа есть | 3 | Frontend | На проверке | — | browser smoke |
 | FR-VAC-05 | P0 | Отклик: ФИО, телефон, резюме и/или опыт | Основа есть | 3 | Full stack | На проверке | — | Jest + temporary DB round-trip |
-| FR-VAC-06 | P0 | Проверка типа и размера резюме | Основа есть | 3 | Backend | На проверке | — | Jest: MIME/extension/size |
-| FR-VAC-07 | P0 | Сохранение отклика, статус и уведомление | Основа есть | 3 | Full stack | На проверке | — | temporary DB round-trip; Telegram message unit test |
+| FR-VAC-06 | P0 | Проверка типа и размера резюме | Основа есть | 3 | Backend | На проверке | — | Jest: MIME/extension/size/signature; PostgreSQL CHECK constraints (04.09.2026) |
+| FR-VAC-07 | P0 | Сохранение отклика, статус и уведомление | Основа есть | 3 | Full stack | На проверке | — | PostgreSQL integration: bytea, atomic rollback, concurrent idempotency; protected download unit tests; Telegram message unit test |
 | FR-VAC-08 | P1 | Шеринг вакансии | Не начато | 5 | Frontend | Запланировано | — | — |
 | FR-VAC-09 | P1 | Статусы вакансии в админке | Основа есть | 4 | Full stack | На проверке | `codex/admin-panel` | draft/published/hidden/archive в `/admin/vacancies` |
 | FR-VAC-10 | P1 | SEO-поля и slug вакансии | Основа есть | 4, 5 | Full stack | На проверке | `codex/admin-panel` | admin validation + unique constraint |

@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatAdminDate, RESPONSE_STATUS_LABELS } from "@/lib/admin-labels";
 import { prisma } from "@/lib/db";
 import { requireAdminPage } from "@/lib/server/admin-auth";
-import { createResumeDownloadUrl } from "@/lib/server/resume-storage";
+import { getResumeDownloadUrl } from "@/lib/server/resume-storage";
 
 export default async function ResponseDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdminPage("responses");
@@ -27,7 +27,7 @@ export default async function ResponseDetailPage({ params }: { params: Promise<{
   ]);
   if (!response) notFound();
   const resumeUrl = response.resumeFilePath
-    ? await createResumeDownloadUrl(response.resumeFilePath)
+    ? await getResumeDownloadUrl(response.resumeFilePath)
     : null;
 
   return (

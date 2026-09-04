@@ -9,8 +9,8 @@
 - **Tailwind CSS v4** + **shadcn/ui** (Base UI)
 - **Prisma 7** (driver adapter `@prisma/adapter-pg`) + **PostgreSQL**
 - **Auth.js / NextAuth** (Credentials, роли в БД)
-- Хранилище файлов — **Supabase Storage**; уведомления — **Telegram** (+ e-mail/WhatsApp)
-- Хостинг — **Vercel**; БД в проде — **Supabase**
+- Резюме — **PostgreSQL bytea**, транзакционно вместе с откликом; уведомления — **Telegram**
+- Хостинг приложения и production PostgreSQL — **Railway**; Supabase не требуется
 
 ## Локальная разработка
 
@@ -49,7 +49,7 @@ Env-переменные — см. [.env.example](.env.example).
 | `pnpm lint` | ESLint |
 | `pnpm format` | Prettier |
 | `pnpm db:push` | синхронизировать схему с БД (локально) |
-| `pnpm db:migrate` | создать миграцию (на полноценном Postgres/Supabase) |
+| `pnpm db:migrate` | создать миграцию (на изолированном PostgreSQL) |
 | `pnpm db:deploy` | применить миграции (prod) |
 | `pnpm db:seed` | наполнить БД начальными данными |
 | `pnpm db:studio` | Prisma Studio |
@@ -58,7 +58,13 @@ Env-переменные — см. [.env.example](.env.example).
 
 Локально схема накатывается через `prisma db push` (встроенная БД Prisma Dev не поддерживает
 shadow-БД для `migrate dev`). Файлы миграций для production генерируются на полноценном Postgres
-(Supabase staging) командой `pnpm db:migrate`, затем применяются в проде через `pnpm db:deploy`.
+(изолированная dev-база) командой `pnpm db:migrate`, затем применяются в проде через `pnpm db:deploy`.
+
+На Railway: build — `pnpm build`, start — `pnpm start`, pre-deploy —
+`pnpm db:deploy && pnpm db:seed`, healthcheck — `/api/health`.
+Резюме до 10 МБ сохраняются в отдельной таблице `ResumeFile`; доступ к
+`/api/admin/resumes/[id]` проверяет активную сессию и права на отклики при каждом запросе.
+Переход и проверка хранения: [docs/POSTGRES_STORAGE.md](docs/POSTGRES_STORAGE.md).
 
 Документация по проекту: [docs/Rastishka_Final_TZ_v1.1.docx](docs/Rastishka_Final_TZ_v1.1.docx),
 макеты — [docs/design](docs/design).

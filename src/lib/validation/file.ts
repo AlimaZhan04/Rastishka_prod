@@ -32,9 +32,12 @@ export type ResumeFileValidation =
 
 /**
  * Checks browser-supplied file metadata before an upload. The server repeats this check;
- * Storage remains private and a binary signature check is performed there as an extra guard.
+ * Files remain private in PostgreSQL; binary signatures are checked before persistence.
  */
 export function validateResumeFile(file: UploadedFileDescriptor): ResumeFileValidation {
+  if (file.name.length > 255) {
+    return { ok: false, message: "Имя файла не должно превышать 255 символов" };
+  }
   if (!Number.isInteger(file.size) || file.size <= 0) {
     return { ok: false, message: "Выберите файл резюме" };
   }
@@ -56,10 +59,10 @@ export function validateResumeFile(file: UploadedFileDescriptor): ResumeFileVali
   return { ok: true, extension: extension as (typeof ALLOWED_RESUME_EXT)[number] };
 }
 
-/** Метаданные уже загруженного в Storage файла резюме. */
+/** Метаданные резюме; содержимое добавляется только сервером после проверки. */
 export const resumeFileMetaSchema = z.object({
   key: z.string().min(1),
-  fileName: z.string().min(1),
+  fileName: z.string().min(1).max(255),
   mimeType: z.enum(ALLOWED_RESUME_MIME),
   size: z.number().int().positive().max(MAX_RESUME_BYTES, "Файл больше 10 МБ"),
 });

@@ -201,7 +201,7 @@ model VacancyResponse {
 
   name           String  @db.VarChar(120)
   phone          String  @db.VarChar(16)
-  resumeFilePath String? // ключ объекта в приватном bucket
+  resumeFilePath String? // ID файла ResumeFile; старые внешние ключи сохранены для безопасной миграции
   resumeFileName String?
   resumeMimeType String?
   resumeSize     Int?
@@ -226,9 +226,22 @@ model VacancyResponse {
   updatedAt DateTime @updatedAt
 
   notifications NotificationLog[]
+  resumeFile    ResumeFile?
 
   @@index([vacancyId, status])
   @@index([status, createdAt])
+}
+
+// Binary content is separate so normal response lists never load file bytes.
+model ResumeFile {
+  id                String          @id @default(uuid())
+  vacancyResponseId String          @unique
+  vacancyResponse   VacancyResponse @relation(fields: [vacancyResponseId], references: [id], onDelete: Cascade)
+  fileName          String          @db.VarChar(255)
+  mimeType          String          @db.VarChar(100)
+  size              Int
+  content           Bytes           @db.ByteA
+  createdAt         DateTime        @default(now())
 }
 
 // ============ NEWS ============
