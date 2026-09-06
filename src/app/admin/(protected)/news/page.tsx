@@ -11,15 +11,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatAdminDate } from "@/lib/admin-labels";
+import { formatAdminDate, CONTENT_STATUS_LABELS } from "@/lib/admin-labels";
+import { AdminListFilters, AdminPagination } from "@/components/admin/list-controls";
+import {
+  ADMIN_PAGE_SIZE,
+  parseAdminListQuery,
+  type AdminListSearchParams,
+} from "@/lib/admin-list-query";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { requireAdminPage } from "@/lib/server/admin-auth";
 
-export default async function AdminNewsPage() {
+export default async function AdminNewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<AdminListSearchParams>;
+}) {
   await requireAdminPage("content");
+  const query = parseAdminListQuery(await searchParams, CONTENT_STATUS_LABELS);
+  const where: Prisma.NewsWhereInput = {
+    status: query.status,
+    ...(query.q
+      ? {
+          OR: [
+            { title: { contains: query.q, mode: "insensitive" } },
+            { slug: { contains: query.q, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
+  const total = await prisma.news.count({ where });
+  const page = Math.min(query.page, Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
   const news = await prisma.news.findMany({
-    orderBy: { date: "desc" },
-    take: 100,
+    where,
+    skip: (page - 1) * ADMIN_PAGE_SIZE,
+    orderBy: [{ date: "desc" }, { id: "desc" }],
+    take: ADMIN_PAGE_SIZE,
     select: { id: true, title: true, slug: true, status: true, date: true },
   });
   return (
@@ -28,6 +55,12 @@ export default async function AdminNewsPage() {
         title="Новости"
         description="Создание, публикация и архив новостей."
         action={<Button render={<Link href="/admin/news/new" />}>Новая новость</Button>}
+      />
+      <AdminListFilters
+        path="/admin/news"
+        q={query.q}
+        status={query.status}
+        statuses={CONTENT_STATUS_LABELS}
       />
       <div className="border-border bg-card overflow-hidden rounded-2xl border">
         <Table>
@@ -73,13 +106,22 @@ export default async function AdminNewsPage() {
             {!news.length ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-muted-foreground py-10 text-center">
-                  Новостей пока нет.
+                  {query.q || query.status
+                    ? "По заданным условиям ничего не найдено."
+                    : "Новостей пока нет."}
                 </TableCell>
               </TableRow>
             ) : null}
           </TableBody>
         </Table>
       </div>
+      <AdminPagination
+        path="/admin/news"
+        q={query.q}
+        status={query.status}
+        page={page}
+        total={total}
+      />
     </>
   );
 }

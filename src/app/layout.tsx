@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito, Inter } from "next/font/google";
+import { SITE_URL } from "@/lib/site-url";
 import "./globals.css";
 
 const heading = Nunito({
@@ -16,7 +17,7 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://ras-tishka.kg"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "РАСтишка — детский сад для особенных детей",
     template: "%s · РАСтишка",
@@ -36,10 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ru"
-      className={`${heading.variable} ${body.variable} h-full antialiased`}
-    >
+    <html lang="ru" className={`${heading.variable} ${body.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

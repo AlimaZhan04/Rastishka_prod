@@ -8,7 +8,7 @@ export function LatestNewsSection({ items }: { items: PublicNewsItem[] }) {
 
   return (
     <section
-      className="bg-brand-mint-soft/38 relative overflow-hidden border-y border-white/70 py-14 sm:py-18"
+      className="section-wash relative overflow-hidden py-14 [--section-tint:rgba(217,238,233,0.5)] sm:py-18"
       aria-labelledby="latest-news-title"
     >
       <div

@@ -9,15 +9,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatAdminDate } from "@/lib/admin-labels";
+import { formatAdminDate, RESPONSE_STATUS_LABELS } from "@/lib/admin-labels";
+import { AdminListFilters, AdminPagination } from "@/components/admin/list-controls";
+import {
+  ADMIN_PAGE_SIZE,
+  parseAdminListQuery,
+  type AdminListSearchParams,
+} from "@/lib/admin-list-query";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { requireAdminPage } from "@/lib/server/admin-auth";
 
-export default async function ResponsesPage() {
+export default async function ResponsesPage({
+  searchParams,
+}: {
+  searchParams: Promise<AdminListSearchParams>;
+}) {
   await requireAdminPage("responses");
+  const query = parseAdminListQuery(await searchParams, RESPONSE_STATUS_LABELS);
+  const where: Prisma.VacancyResponseWhereInput = {
+    status: query.status,
+    ...(query.q
+      ? {
+          OR: [
+            { name: { contains: query.q, mode: "insensitive" } },
+            { phone: { contains: query.q.replace(/[\s()-]/g, ""), mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
+  const total = await prisma.vacancyResponse.count({ where });
+  const page = Math.min(query.page, Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
   const responses = await prisma.vacancyResponse.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 100,
+    where,
+    skip: (page - 1) * ADMIN_PAGE_SIZE,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    take: ADMIN_PAGE_SIZE,
     select: {
       id: true,
       name: true,
@@ -31,6 +58,12 @@ export default async function ResponsesPage() {
   return (
     <>
       <AdminPageHeader title="Отклики" description="Отклики кандидатов на вакансии." />
+      <AdminListFilters
+        path="/admin/responses"
+        q={query.q}
+        status={query.status}
+        statuses={RESPONSE_STATUS_LABELS}
+      />
       <div className="border-border bg-card overflow-hidden rounded-2xl border">
         <Table>
           <TableHeader>
@@ -66,13 +99,22 @@ export default async function ResponsesPage() {
             {!responses.length ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-muted-foreground py-10 text-center">
-                  Откликов пока нет.
+                  {query.q || query.status
+                    ? "По заданным условиям ничего не найдено."
+                    : "Откликов пока нет."}
                 </TableCell>
               </TableRow>
             ) : null}
           </TableBody>
         </Table>
       </div>
+      <AdminPagination
+        path="/admin/responses"
+        q={query.q}
+        status={query.status}
+        page={page}
+        total={total}
+      />
     </>
   );
 }

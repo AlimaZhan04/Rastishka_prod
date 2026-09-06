@@ -27,11 +27,18 @@ import {
   VISIT_FORMATS,
 } from "@/lib/enums";
 import {
+  getApplicationFieldErrors,
   initialApplicationSubmissionState,
   type ApplicationInput,
+  type ApplicationSubmissionState,
 } from "@/lib/application-submission";
 import { formatKgPhone } from "@/lib/phone-format";
-import { applicationSchema, stepSchemas, TOTAL_STEPS } from "@/lib/validation/application";
+import {
+  APPLICATION_FIELD_STEPS,
+  applicationSchema,
+  stepSchemas,
+  TOTAL_STEPS,
+} from "@/lib/validation/application";
 import { BrandMark, DoodleHeart } from "@/components/brand/brand-motifs";
 
 const emptyValues: ApplicationInput = {
@@ -94,15 +101,45 @@ function ErrorText({ message, id }: { message?: string; id?: string }) {
   ) : null;
 }
 
-function AnketaForm() {
+function scrollFieldIntoView(form: HTMLFormElement | null, field: string) {
+  // Wait until the newly rendered error participates in the scrollable layout.
+  requestAnimationFrame(() => {
+    const input = form?.querySelector<HTMLElement>(`[name="${field}"]`);
+    input?.scrollIntoView?.({ block: "center", behavior: "instant" });
+    for (const id of input?.getAttribute("aria-describedby")?.split(" ") ?? []) {
+      document.getElementById(id)?.scrollIntoView?.({ block: "nearest", behavior: "instant" });
+    }
+  });
+}
+
+function AnketaForm({ onSubmittingChange }: { onSubmittingChange: (pending: boolean) => void }) {
   const close = useAnketa((state) => state.close);
   const selectedVisitFormat = useAnketa((state) => state.visitFormat);
   const source = useAnketa((state) => state.source);
   const formRef = useRef<HTMLFormElement>(null);
-  const idempotencyKeyRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+  const idempotencyKeyRef = useRef("");
+  const submissionInFlight = useRef(false);
+  const fieldToFocus = useRef<FieldPath<ApplicationInput> | null>(null);
   const [step, setStep] = useState(1);
-  const [state, formAction, isPending] = useActionState(
-    submitApplication,
+  const [state, formAction, isPending] = useActionState<ApplicationSubmissionState, FormData>(
+    async (previousState, payload) => {
+      try {
+        const result = await submitApplication(previousState, payload);
+        if (result.status === "error" && result.fieldErrors) revealErrors(result.fieldErrors);
+        return result;
+      } catch {
+        return {
+          status: "error",
+          message:
+            "Не удалось связаться с сервером. Проверьте соединение и попробуйте ещё раз — ответы сохранены в форме.",
+        };
+      } finally {
+        submissionInFlight.current = false;
+        onSubmittingChange(false);
+      }
+    },
     initialApplicationSubmissionState,
   );
   const form = useForm<ApplicationInput>({
@@ -119,12 +156,43 @@ function AnketaForm() {
   const previousExperience = useWatch({ control: form.control, name: "previousExperience" });
   const phoneField = form.register("phone");
 
+  function focusField(field: FieldPath<ApplicationInput>) {
+    form.setFocus(field);
+    scrollFieldIntoView(formRef.current, field);
+  }
+
   useEffect(() => {
-    if (state.status !== "error" || !state.fieldErrors) return;
-    for (const [field, message] of Object.entries(state.fieldErrors)) {
-      form.setError(field as FieldPath<ApplicationInput>, { type: "server", message });
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    if (fieldToFocus.current) {
+      form.setFocus(fieldToFocus.current);
+      scrollFieldIntoView(formRef.current, fieldToFocus.current);
+      fieldToFocus.current = null;
+    } else if (state.status === "error") {
+      errorRef.current?.focus();
+    } else {
+      formRef.current?.querySelector<HTMLElement>(`[data-step="${step}"] legend`)?.focus();
     }
-  }, [form, state]);
+  }, [form, state, step]);
+
+  function revealErrors(fieldErrors: Record<string, string>) {
+    let firstInvalidField: keyof ApplicationInput | undefined;
+    for (const [field, message] of Object.entries(fieldErrors)) {
+      if (!(field in APPLICATION_FIELD_STEPS)) continue;
+      const fieldPath = field as keyof ApplicationInput;
+      firstInvalidField ??= fieldPath;
+      // Manual step validation must also enable onTouched revalidation on correction.
+      form.setValue(fieldPath, form.getValues(fieldPath), { shouldTouch: true });
+      form.setError(fieldPath, { type: "validate", message });
+    }
+    if (!firstInvalidField) return;
+    const invalidStep = APPLICATION_FIELD_STEPS[firstInvalidField]!;
+    if (invalidStep === step) {
+      focusField(firstInvalidField);
+    } else {
+      fieldToFocus.current = firstInvalidField;
+      setStep(invalidStep);
+    }
+  }
 
   function validateStep(): boolean {
     const result = stepSchemas[step as keyof typeof stepSchemas].safeParse(form.getValues());
@@ -137,13 +205,14 @@ function AnketaForm() {
       if (typeof field === "string") {
         const fieldPath = field as FieldPath<ApplicationInput>;
         firstInvalidField ??= fieldPath;
+        form.setValue(fieldPath, form.getValues(fieldPath), { shouldTouch: true });
         form.setError(fieldPath, {
           type: "validate",
           message: issue.message,
         });
       }
     }
-    if (firstInvalidField) form.setFocus(firstInvalidField);
+    if (firstInvalidField) focusField(firstInvalidField);
     return false;
   }
 
@@ -151,18 +220,26 @@ function AnketaForm() {
     if (validateStep()) setStep((current) => Math.min(TOTAL_STEPS, current + 1));
   }
 
-  async function sendForm() {
-    const valid = await form.trigger(undefined, { shouldFocus: true });
-    if (!valid) return;
-    formRef.current?.requestSubmit();
-  }
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (idempotencyKeyRef.current && !idempotencyKeyRef.current.value) {
-      idempotencyKeyRef.current.value = `application_${crypto.randomUUID()}`;
+    if (isPending || submissionInFlight.current) return;
+    if (step < TOTAL_STEPS) {
+      nextStep();
+      return;
+    }
+    const parsed = applicationSchema.safeParse(form.getValues());
+    form.clearErrors();
+    if (!parsed.success) {
+      revealErrors(getApplicationFieldErrors(parsed.error));
+      return;
+    }
+    if (!idempotencyKeyRef.current) {
+      idempotencyKeyRef.current = `application_${crypto.randomUUID()}`;
     }
     const payload = new FormData(event.currentTarget);
+    payload.set("idempotencyKey", idempotencyKeyRef.current);
+    submissionInFlight.current = true;
+    onSubmittingChange(true);
     startTransition(() => formAction(payload));
   }
 
@@ -191,9 +268,10 @@ function AnketaForm() {
       ref={formRef}
       method="post"
       onSubmit={handleSubmit}
-      className="flex min-h-[min(42rem,calc(100dvh-1rem))] flex-col sm:min-h-[min(34rem,calc(100dvh-1rem))]"
+      noValidate
+      aria-busy={isPending}
+      className="flex h-[min(46rem,calc(100dvh-1rem))] min-h-0 flex-col sm:h-[min(42rem,calc(100dvh-1rem))]"
     >
-      <input ref={idempotencyKeyRef} type="hidden" name="idempotencyKey" defaultValue="" />
       <input type="hidden" name="sourcePage" value={source?.page ?? ""} />
       <input type="hidden" name="sourceCta" value={source?.cta ?? ""} />
       <input type="hidden" name="utmSource" value={source?.utmSource ?? ""} />
@@ -204,7 +282,7 @@ function AnketaForm() {
         <Input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="border-border/65 from-brand-mint-soft/70 to-secondary/65 relative border-b bg-gradient-to-r via-white/90 px-5 py-4 sm:px-7 sm:py-5">
+      <div className="border-border/65 from-brand-mint-soft/70 to-secondary/65 relative shrink-0 border-b bg-gradient-to-r via-white/90 px-5 py-4 sm:px-7 sm:py-5">
         <DoodleHeart className="text-brand-pink/55 absolute top-3 right-14 size-9 rotate-12" />
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -223,6 +301,7 @@ function AnketaForm() {
             variant="ghost"
             size="icon-sm"
             onClick={close}
+            disabled={isPending}
             aria-label="Закрыть анкету"
           >
             <X aria-hidden="true" />
@@ -246,9 +325,11 @@ function AnketaForm() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-7 sm:py-7">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-6 sm:px-7 sm:py-7">
         {state.status === "error" && (
           <p
+            ref={errorRef}
+            tabIndex={-1}
             className="bg-destructive/10 text-destructive mb-4 rounded-lg px-3 py-2 text-sm"
             role="alert"
           >
@@ -256,12 +337,19 @@ function AnketaForm() {
           </p>
         )}
 
-        <div hidden={step !== 1} className={step === 1 ? "motion-step-in" : undefined}>
+        <div
+          data-step={1}
+          hidden={step !== 1}
+          className={step === 1 ? "motion-step-in" : undefined}
+        >
           <fieldset
             className="space-y-3"
             aria-describedby={errors.visitFormat ? "visit-format-error" : undefined}
           >
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Какой формат посещения вам удобен?
             </legend>
             {VISIT_FORMATS.map((option) => (
@@ -292,12 +380,19 @@ function AnketaForm() {
           </fieldset>
         </div>
 
-        <div hidden={step !== 2} className={step === 2 ? "motion-step-in" : undefined}>
+        <div
+          data-step={2}
+          hidden={step !== 2}
+          className={step === 2 ? "motion-step-in" : undefined}
+        >
           <fieldset
             className="space-y-3"
             aria-describedby={errors.speech ? "speech-error" : undefined}
           >
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Как развивается речь ребёнка?
             </legend>
             {SPEECH_OPTIONS.map((option) => (
@@ -313,12 +408,19 @@ function AnketaForm() {
           </fieldset>
         </div>
 
-        <div hidden={step !== 3} className={step === 3 ? "motion-step-in" : undefined}>
+        <div
+          data-step={3}
+          hidden={step !== 3}
+          className={step === 3 ? "motion-step-in" : undefined}
+        >
           <fieldset
             className="space-y-3"
             aria-describedby={errors.behavior ? "behavior-error" : undefined}
           >
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Есть ли особенности поведения?
             </legend>
             {BEHAVIOR_OPTIONS.map((option) => (
@@ -349,12 +451,19 @@ function AnketaForm() {
           </fieldset>
         </div>
 
-        <div hidden={step !== 4} className={step === 4 ? "motion-step-in" : undefined}>
+        <div
+          data-step={4}
+          hidden={step !== 4}
+          className={step === 4 ? "motion-step-in" : undefined}
+        >
           <fieldset
             className="space-y-3"
             aria-describedby={errors.toilet ? "toilet-error" : undefined}
           >
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Как обстоят дела с туалетом?
             </legend>
             {TOILET_OPTIONS.map((option) => (
@@ -370,9 +479,16 @@ function AnketaForm() {
           </fieldset>
         </div>
 
-        <div hidden={step !== 5} className={step === 5 ? "motion-step-in" : undefined}>
+        <div
+          data-step={5}
+          hidden={step !== 5}
+          className={step === 5 ? "motion-step-in" : undefined}
+        >
           <fieldset className="space-y-3" aria-describedby={errors.food ? "food-error" : undefined}>
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Какие навыки питания есть?
             </legend>
             <p className="text-muted-foreground -mt-2 mb-4 text-sm">
@@ -392,12 +508,19 @@ function AnketaForm() {
           </fieldset>
         </div>
 
-        <div hidden={step !== 6} className={step === 6 ? "motion-step-in" : undefined}>
+        <div
+          data-step={6}
+          hidden={step !== 6}
+          className={step === 6 ? "motion-step-in" : undefined}
+        >
           <fieldset
             className="space-y-3"
             aria-describedby={errors.previousExperience ? "experience-error" : undefined}
           >
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Был ли опыт занятий?
             </legend>
             {EXPERIENCE_OPTIONS.map((option) => (
@@ -413,9 +536,16 @@ function AnketaForm() {
           </fieldset>
         </div>
 
-        <div hidden={step !== 7} className={step === 7 ? "motion-step-in" : undefined}>
+        <div
+          data-step={7}
+          hidden={step !== 7}
+          className={step === 7 ? "motion-step-in" : undefined}
+        >
           <fieldset className="space-y-4">
-            <legend className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl">
+            <legend
+              tabIndex={-1}
+              className="font-heading text-primary mb-4 text-2xl leading-tight font-extrabold text-balance sm:text-3xl"
+            >
               Как с вами связаться?
             </legend>
             <div>
@@ -475,7 +605,7 @@ function AnketaForm() {
         </div>
       </div>
 
-      <div className="border-border/65 sticky bottom-0 flex items-center justify-between gap-3 border-t bg-white/92 px-5 py-4 backdrop-blur-sm sm:px-7">
+      <div className="border-border/65 sticky bottom-0 flex shrink-0 items-center justify-between gap-3 border-t bg-white/92 px-5 py-4 backdrop-blur-sm sm:px-7">
         {step > 1 ? (
           <Button
             type="button"
@@ -490,11 +620,11 @@ function AnketaForm() {
           <span />
         )}
         {step < TOTAL_STEPS ? (
-          <Button type="button" className="min-w-32 rounded-full" onClick={nextStep}>
+          <Button type="submit" className="min-w-32 rounded-full" disabled={isPending}>
             Далее <ChevronRight aria-hidden="true" />
           </Button>
         ) : (
-          <Button type="button" className="rounded-full" onClick={sendForm} disabled={isPending}>
+          <Button type="submit" className="rounded-full" disabled={isPending}>
             {isPending ? "Отправляем…" : "Отправить анкету"}
           </Button>
         )}
@@ -506,14 +636,15 @@ function AnketaForm() {
 export function AnketaModal() {
   const isOpen = useAnketa((state) => state.isOpen);
   const close = useAnketa((state) => state.close);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && !isSubmitting && close()}>
       <DialogContent
         className="bg-background max-h-[calc(100dvh-1rem)] max-w-[calc(100%-1rem)] overflow-hidden rounded-[1.75rem] border border-white/85 p-0 shadow-[0_28px_80px_-28px_rgba(42,26,30,0.55)] sm:max-w-2xl"
         showCloseButton={false}
       >
-        {isOpen && <AnketaForm />}
+        {isOpen && <AnketaForm onSubmittingChange={setIsSubmitting} />}
       </DialogContent>
     </Dialog>
   );

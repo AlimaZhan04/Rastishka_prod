@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useAdminFormAction } from "@/components/admin/use-admin-form-action";
 import {
   saveAdminUser,
   saveSiteSettings,
@@ -8,7 +8,7 @@ import {
 } from "@/app/actions/admin-settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { AdminFormField as Field } from "@/components/admin/form-field";
 import { Textarea } from "@/components/ui/textarea";
 import { ADMIN_ROLE_LABELS } from "@/lib/admin-labels";
 import type { SiteSettings } from "@/lib/content/site";
@@ -22,34 +22,16 @@ function Message({ state }: { state: AdminSettingsState }) {
           ? "bg-brand-mint-soft text-brand-teal rounded-xl px-4 py-3 text-sm"
           : "bg-destructive/10 text-destructive rounded-xl px-4 py-3 text-sm"
       }
-      role="status"
+      role={state.success ? "status" : "alert"}
+      tabIndex={-1}
     >
       {state.message}
     </p>
   ) : null;
 }
-function Field({
-  label,
-  name,
-  error,
-  children,
-}: {
-  label: string;
-  name: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
-      {children}
-      {error ? <p className="text-destructive text-sm">{error}</p> : null}
-    </div>
-  );
-}
 
 export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
-  const [state, action, pending] = useActionState(saveSiteSettings, initialState);
+  const { state, action, pending, formRef } = useAdminFormAction(saveSiteSettings, initialState);
   const branch = settings.branches[0] ?? {
     title: "Главный филиал",
     address: "г. Бишкек",
@@ -59,14 +41,14 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
   const audienceByKey = Object.fromEntries(settings.audience.map((item) => [item.key, item]));
   const keys = ["ras", "zprr", "adhd", "down"];
   return (
-    <form action={action} className="space-y-6">
+    <form action={action} ref={formRef} className="space-y-6">
       <Message state={state} />
       <section className="border-border bg-card grid gap-5 rounded-2xl border p-5 md:grid-cols-2">
         <h2 className="font-heading text-primary text-xl font-bold md:col-span-2">Главный экран</h2>
-        <Field label="Заголовок" name="heroTitle">
+        <Field label="Заголовок" name="heroTitle" error={state.fieldErrors?.heroTitle}>
           <Input id="heroTitle" name="heroTitle" defaultValue={settings.hero.title} required />
         </Field>
-        <Field label="Подзаголовок" name="heroSubtitle">
+        <Field label="Подзаголовок" name="heroSubtitle" error={state.fieldErrors?.heroSubtitle}>
           <Textarea
             id="heroSubtitle"
             name="heroSubtitle"
@@ -74,15 +56,20 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             required
           />
         </Field>
-        <Field label="Ссылка на изображение" name="heroImageUrl">
+        <Field
+          label="Ссылка на изображение"
+          name="heroImageUrl"
+          error={state.fieldErrors?.heroImageUrl}
+        >
           <Input
             id="heroImageUrl"
             name="heroImageUrl"
-            type="url"
+            inputMode="url"
+            placeholder="/images/… или https://…"
             defaultValue={settings.hero.imageUrl ?? ""}
           />
         </Field>
-        <Field label="Alt-текст" name="heroImageAlt">
+        <Field label="Alt-текст" name="heroImageAlt" error={state.fieldErrors?.heroImageAlt}>
           <Input
             id="heroImageAlt"
             name="heroImageAlt"
@@ -126,10 +113,10 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
         <h2 className="font-heading text-primary text-xl font-bold md:col-span-2">
           Контакты и филиал
         </h2>
-        <Field label="Телефон" name="phone">
+        <Field label="Телефон" name="phone" error={state.fieldErrors?.phone}>
           <Input id="phone" name="phone" defaultValue={settings.phone} required />
         </Field>
-        <Field label="Instagram" name="instagram">
+        <Field label="Instagram" name="instagram" error={state.fieldErrors?.instagram}>
           <Input
             id="instagram"
             name="instagram"
@@ -137,7 +124,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             defaultValue={settings.socials.instagram ?? ""}
           />
         </Field>
-        <Field label="Facebook" name="facebook">
+        <Field label="Facebook" name="facebook" error={state.fieldErrors?.facebook}>
           <Input
             id="facebook"
             name="facebook"
@@ -145,7 +132,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             defaultValue={settings.socials.facebook ?? ""}
           />
         </Field>
-        <Field label="Threads" name="threads">
+        <Field label="Threads" name="threads" error={state.fieldErrors?.threads}>
           <Input
             id="threads"
             name="threads"
@@ -153,13 +140,13 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             defaultValue={settings.socials.threads ?? ""}
           />
         </Field>
-        <Field label="Название филиала" name="branchTitle">
+        <Field label="Название филиала" name="branchTitle" error={state.fieldErrors?.branchTitle}>
           <Input id="branchTitle" name="branchTitle" defaultValue={branch.title} required />
         </Field>
-        <Field label="Адрес" name="branchAddress">
+        <Field label="Адрес" name="branchAddress" error={state.fieldErrors?.branchAddress}>
           <Input id="branchAddress" name="branchAddress" defaultValue={branch.address} required />
         </Field>
-        <Field label="Широта" name="branchLat">
+        <Field label="Широта" name="branchLat" error={state.fieldErrors?.branchLat}>
           <Input
             id="branchLat"
             name="branchLat"
@@ -169,7 +156,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             required
           />
         </Field>
-        <Field label="Долгота" name="branchLng">
+        <Field label="Долгота" name="branchLng" error={state.fieldErrors?.branchLng}>
           <Input
             id="branchLng"
             name="branchLng"
@@ -198,10 +185,11 @@ export type AdminUserDraft = {
   canViewResponses?: boolean;
 };
 export function AdminUserForm({ user = {} }: { user?: AdminUserDraft }) {
-  const [state, action, pending] = useActionState(saveAdminUser, initialState);
+  const { state, action, pending, formRef } = useAdminFormAction(saveAdminUser, initialState);
   return (
     <form
       action={action}
+      ref={formRef}
       className="border-border bg-card grid gap-4 rounded-2xl border p-5 md:grid-cols-2"
     >
       {user.id ? <input type="hidden" name="id" value={user.id} /> : null}
@@ -242,6 +230,8 @@ export function AdminUserForm({ user = {} }: { user?: AdminUserDraft }) {
           name="password"
           type="password"
           autoComplete="new-password"
+          minLength={12}
+          maxLength={256}
           required={!user.id}
         />
       </Field>

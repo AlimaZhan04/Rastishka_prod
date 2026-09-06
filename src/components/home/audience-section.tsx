@@ -12,7 +12,7 @@ const ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
 
 export function AudienceSection({ audience }: { audience: SiteSettings["audience"] }) {
   return (
-    <section className="relative overflow-hidden border-y border-white/70 bg-white/48 py-14 sm:py-18">
+    <section className="section-wash relative overflow-hidden py-14 [--section-tint:rgba(255,255,255,0.48)] sm:py-18">
       <div
         className="bg-brand-rose/65 pointer-events-none absolute top-8 -right-24 size-56 rounded-[58%_42%_52%_48%/48%_58%_42%_52%]"
         aria-hidden="true"
@@ -37,7 +37,7 @@ export function AudienceSection({ audience }: { audience: SiteSettings["audience
           />
         </div>
 
-        <ul className="grid grid-cols-2 gap-3 sm:gap-4">
+        <ul className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2 sm:gap-4">
           {audience.map((item, index) => {
             const Icon = ICONS[item.key] ?? Heart;
             const mint = index % 3 === 1;
@@ -54,9 +54,7 @@ export function AudienceSection({ audience }: { audience: SiteSettings["audience
                 <h3 className="font-heading text-foreground mt-3 text-base font-extrabold text-balance sm:mt-4 sm:text-lg">
                   {item.title}
                 </h3>
-                <p className="text-muted-foreground mt-1.5 hidden text-sm leading-6 sm:block">
-                  {item.description}
-                </p>
+                <p className="text-muted-foreground mt-1.5 text-sm leading-6">{item.description}</p>
               </li>
             );
           })}

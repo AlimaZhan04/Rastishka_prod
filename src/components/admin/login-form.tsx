@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useAdminFormAction } from "@/components/admin/use-admin-form-action";
 import { loginAdmin, type AdminLoginState } from "@/app/actions/admin-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,12 +9,16 @@ import { Label } from "@/components/ui/label";
 const initialState: AdminLoginState = {};
 
 export function AdminLoginForm() {
-  const [state, action, pending] = useActionState(loginAdmin, initialState);
+  const { state, action, pending, formRef } = useAdminFormAction(loginAdmin, initialState);
 
   return (
-    <form action={action} className="space-y-5">
+    <form action={action} ref={formRef} className="space-y-5">
       {state.message ? (
-        <p className="bg-destructive/10 text-destructive rounded-xl px-4 py-3 text-sm" role="alert">
+        <p
+          className="bg-destructive/10 text-destructive rounded-xl px-4 py-3 text-sm"
+          role="alert"
+          tabIndex={-1}
+        >
           {state.message}
         </p>
       ) : null}

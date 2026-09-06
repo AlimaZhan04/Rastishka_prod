@@ -1,6 +1,13 @@
 "use client";
 
-import { startTransition, useActionState, useRef, useState, type FormEvent } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { CheckCircle2, Paperclip } from "lucide-react";
 import { submitVacancyResponse } from "@/app/actions/vacancy-response";
 import { Button } from "@/components/ui/button";
@@ -9,14 +16,23 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   initialVacancyResponseSubmissionState,
+  parseVacancyResponseFormData,
   type VacancyResponseSubmissionState,
 } from "@/lib/vacancy-response-submission";
 import { formatKgPhone } from "@/lib/phone-format";
 import { validateResumeFile } from "@/lib/validation/file";
 
+const FIELD_IDS: Record<string, string> = {
+  name: "response-name",
+  phone: "response-phone",
+  resumeFile: "resume-file",
+  experienceText: "experience-text",
+  consent: "response-consent",
+};
+
 function ErrorText({ message, id }: { message?: string; id?: string }) {
   return message ? (
-    <p id={id} className="text-destructive mt-1.5 text-sm">
+    <p id={id} className="text-destructive mt-1.5 text-sm" role="alert">
       {message}
     </p>
   ) : null;
@@ -29,21 +45,68 @@ export function VacancyResponseForm({
   vacancyId: string;
   sourcePage: string;
 }) {
-  const idempotencyKeyRef = useRef<HTMLInputElement>(null);
+  const idempotencyKeyRef = useRef("");
+  const fileRef = useRef<HTMLInputElement>(null);
+  const feedbackRef = useRef<HTMLDivElement>(null);
+  const submissionInFlight = useRef(false);
   const [phone, setPhone] = useState("");
+  const [fileName, setFileName] = useState<string>();
   const [fileError, setFileError] = useState<string>();
+  const [feedback, setFeedback] =
+    useState<Extract<VacancyResponseSubmissionState, { status: "error" }>>();
   const [state, formAction, isPending] = useActionState<VacancyResponseSubmissionState, FormData>(
-    submitVacancyResponse,
+    async (previousState, payload) => {
+      try {
+        const result = await submitVacancyResponse(previousState, payload);
+        setFeedback(result.status === "error" ? result : undefined);
+        return result;
+      } catch {
+        const result = {
+          status: "error" as const,
+          message:
+            "Не удалось связаться с сервером. Проверьте соединение и попробуйте ещё раз — данные сохранены в форме.",
+        };
+        setFeedback(result);
+        return result;
+      } finally {
+        submissionInFlight.current = false;
+      }
+    },
     initialVacancyResponseSubmissionState,
   );
-  const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
+  const fieldErrors = feedback?.fieldErrors;
+
+  useEffect(() => {
+    if (feedback) feedbackRef.current?.focus();
+  }, [feedback]);
+
+  function clearResume() {
+    if (fileRef.current) fileRef.current.value = "";
+    setFileName(undefined);
+    setFileError(undefined);
+    setFeedback(undefined);
+    fileRef.current?.focus();
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (idempotencyKeyRef.current && !idempotencyKeyRef.current.value) {
-      idempotencyKeyRef.current.value = `vacancy_response_${crypto.randomUUID()}`;
-    }
+    if (isPending || submissionInFlight.current) return;
     const payload = new FormData(event.currentTarget);
+    const parsed = parseVacancyResponseFormData(payload);
+    if (!parsed.success) {
+      setFeedback({
+        status: "error",
+        message: "Проверьте, пожалуйста, заполнение формы.",
+        fieldErrors: parsed.fieldErrors,
+      });
+      return;
+    }
+    if (!idempotencyKeyRef.current) {
+      idempotencyKeyRef.current = `vacancy_response_${crypto.randomUUID()}`;
+    }
+    payload.set("idempotencyKey", idempotencyKeyRef.current);
+    submissionInFlight.current = true;
+    setFeedback(undefined);
     startTransition(() => formAction(payload));
   }
 
@@ -60,19 +123,49 @@ export function VacancyResponseForm({
   }
 
   return (
-    <form method="post" onSubmit={handleSubmit} className="space-y-5" noValidate>
+    <form
+      method="post"
+      onSubmit={handleSubmit}
+      className="space-y-5"
+      aria-busy={isPending}
+      noValidate
+    >
       <input type="hidden" name="vacancyId" value={vacancyId} />
       <input type="hidden" name="sourcePage" value={sourcePage} />
-      <input ref={idempotencyKeyRef} type="hidden" name="idempotencyKey" defaultValue="" />
       <div className="hidden" aria-hidden="true">
         <Label htmlFor="vacancy-website">Не заполняйте это поле</Label>
         <Input id="vacancy-website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      {state.status === "error" ? (
-        <p className="bg-destructive/10 text-destructive rounded-lg px-3 py-2 text-sm" role="alert">
-          {state.message}
-        </p>
+      {feedback ? (
+        <div
+          ref={feedbackRef}
+          tabIndex={-1}
+          className="bg-destructive/10 text-destructive rounded-lg px-3 py-2 text-sm"
+          role="alert"
+        >
+          <p>{feedback.message}</p>
+          {fieldErrors && (
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              {Object.entries(fieldErrors)
+                .filter(([field]) => FIELD_IDS[field])
+                .map(([field, message]) => (
+                  <li key={field}>
+                    <a
+                      href={`#${FIELD_IDS[field]}`}
+                      className="underline underline-offset-2"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        document.getElementById(FIELD_IDS[field])?.focus();
+                      }}
+                    >
+                      {message}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </div>
       ) : null}
 
       <div>
@@ -82,6 +175,7 @@ export function VacancyResponseForm({
           name="name"
           className="mt-2"
           autoComplete="name"
+          maxLength={120}
           aria-invalid={Boolean(fieldErrors?.name)}
           aria-describedby={fieldErrors?.name ? "response-name-error" : undefined}
         />
@@ -109,6 +203,7 @@ export function VacancyResponseForm({
       <div>
         <Label htmlFor="resume-file">Резюме</Label>
         <Input
+          ref={fileRef}
           id="resume-file"
           name="resumeFile"
           className="mt-2"
@@ -122,6 +217,8 @@ export function VacancyResponseForm({
           }
           onChange={(event) => {
             const file = event.currentTarget.files?.[0];
+            setFileName(file?.name);
+            setFeedback(undefined);
             if (!file) return setFileError(undefined);
             const validation = validateResumeFile(file);
             setFileError(validation.ok ? undefined : validation.message);
@@ -135,6 +232,17 @@ export function VacancyResponseForm({
           МБ.
         </p>
         <ErrorText id="resume-file-error" message={fileError || fieldErrors?.resumeFile} />
+        {fileName && (
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-2"
+            onClick={clearResume}
+            disabled={isPending}
+          >
+            Убрать файл
+          </Button>
+        )}
       </div>
 
       <div>
@@ -154,6 +262,7 @@ export function VacancyResponseForm({
       <div>
         <Label className="border-border items-start gap-3 rounded-lg border p-3 text-sm leading-5 font-normal">
           <input
+            id="response-consent"
             type="checkbox"
             name="consent"
             className="accent-primary mt-0.5 size-5 shrink-0"
@@ -176,11 +285,7 @@ export function VacancyResponseForm({
         <ErrorText id="response-consent-error" message={fieldErrors?.consent} />
       </div>
 
-      <Button
-        type="submit"
-        className="h-12 w-full rounded-full"
-        disabled={isPending || Boolean(fileError)}
-      >
+      <Button type="submit" className="h-12 w-full rounded-full" disabled={isPending}>
         {isPending ? "Отправляем…" : "Отправить отклик"}
       </Button>
     </form>

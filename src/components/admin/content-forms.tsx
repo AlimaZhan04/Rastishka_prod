@@ -1,38 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useAdminFormAction } from "@/components/admin/use-admin-form-action";
 import { saveNews, saveVacancy, type AdminContentState } from "@/app/actions/admin-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { AdminFormField as Field } from "@/components/admin/form-field";
 import { Textarea } from "@/components/ui/textarea";
-import { CONTENT_STATUS_LABELS } from "@/lib/admin-labels";
+import { CONTENT_STATUS_LABELS, formatAdminDateInput } from "@/lib/admin-labels";
 
 const initialState: AdminContentState = {};
-
-function ErrorText({ message }: { message?: string }) {
-  return message ? <p className="text-destructive mt-1 text-sm">{message}</p> : null;
-}
-
-function Field({
-  label,
-  name,
-  error,
-  children,
-}: {
-  label: string;
-  name: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
-      {children}
-      <ErrorText message={error} />
-    </div>
-  );
-}
 
 type NewsDraft = {
   id?: string;
@@ -49,10 +25,11 @@ type NewsDraft = {
 };
 
 export function NewsForm({ news = {} }: { news?: NewsDraft }) {
-  const [state, action, pending] = useActionState(saveNews, initialState);
+  const { state, action, pending, formRef } = useAdminFormAction(saveNews, initialState);
   return (
     <form
       action={action}
+      ref={formRef}
       className="border-border bg-card grid gap-5 rounded-2xl border p-5 md:grid-cols-2"
     >
       {news.id ? <input type="hidden" name="id" value={news.id} /> : null}
@@ -60,6 +37,7 @@ export function NewsForm({ news = {} }: { news?: NewsDraft }) {
         <p
           className="bg-destructive/10 text-destructive rounded-xl px-4 py-3 text-sm md:col-span-2"
           role="alert"
+          tabIndex={-1}
         >
           {state.message}
         </p>
@@ -99,7 +77,13 @@ export function NewsForm({ news = {} }: { news?: NewsDraft }) {
         </Field>
       </div>
       <Field label="Ссылка на изображение" name="image" error={state.fieldErrors?.image}>
-        <Input id="image" name="image" type="url" defaultValue={news.image ?? ""} />
+        <Input
+          id="image"
+          name="image"
+          inputMode="url"
+          placeholder="/images/… или https://…"
+          defaultValue={news.image ?? ""}
+        />
       </Field>
       <Field label="Alt-текст изображения" name="alt" error={state.fieldErrors?.alt}>
         <Input id="alt" name="alt" defaultValue={news.alt ?? ""} maxLength={200} />
@@ -109,7 +93,7 @@ export function NewsForm({ news = {} }: { news?: NewsDraft }) {
           id="date"
           name="date"
           type="date"
-          defaultValue={news.date ?? new Date().toISOString().slice(0, 10)}
+          defaultValue={news.date ?? formatAdminDateInput(new Date())}
           required
         />
       </Field>
@@ -163,10 +147,11 @@ type VacancyDraft = {
 };
 
 export function VacancyForm({ vacancy = {} }: { vacancy?: VacancyDraft }) {
-  const [state, action, pending] = useActionState(saveVacancy, initialState);
+  const { state, action, pending, formRef } = useAdminFormAction(saveVacancy, initialState);
   return (
     <form
       action={action}
+      ref={formRef}
       className="border-border bg-card grid gap-5 rounded-2xl border p-5 md:grid-cols-2"
     >
       {vacancy.id ? <input type="hidden" name="id" value={vacancy.id} /> : null}
@@ -174,6 +159,7 @@ export function VacancyForm({ vacancy = {} }: { vacancy?: VacancyDraft }) {
         <p
           className="bg-destructive/10 text-destructive rounded-xl px-4 py-3 text-sm md:col-span-2"
           role="alert"
+          tabIndex={-1}
         >
           {state.message}
         </p>

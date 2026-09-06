@@ -12,15 +12,14 @@ export type ApplicationSubmissionState =
 
 export const initialApplicationSubmissionState: ApplicationSubmissionState = { status: "idle" };
 
-type SubmissionGuard =
-  | { ok: true; idempotencyKey: string }
-  | { ok: false; message: string };
+type SubmissionGuard = { ok: true; idempotencyKey: string } | { ok: false; message: string };
 
 const GENERIC_SUBMISSION_ERROR = "Не удалось отправить анкету. Попробуйте ещё раз немного позже.";
 
-function formString(formData: FormData, name: string): string | undefined {
+function formString(formData: FormData, name: string, maxLength?: number): string | undefined {
   const value = formData.get(name);
-  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+  const trimmed = typeof value === "string" ? value.trim() : "";
+  return trimmed ? trimmed.slice(0, maxLength) : undefined;
 }
 
 /**
@@ -39,15 +38,16 @@ export function parseApplicationFormData(
     toilet: formString(formData, "toilet"),
     food: formData.getAll("food").filter((value): value is string => typeof value === "string"),
     previousExperience: formString(formData, "previousExperience"),
-    parentName: formString(formData, "parentName"),
-    phone: formString(formData, "phone"),
+    parentName: formString(formData, "parentName") ?? "",
+    phone: formString(formData, "phone") ?? "",
     consent: formData.get("consent") === "on",
     source: {
-      page: formString(formData, "sourcePage"),
-      cta: formString(formData, "sourceCta"),
-      utmSource: formString(formData, "utmSource"),
-      utmMedium: formString(formData, "utmMedium"),
-      utmCampaign: formString(formData, "utmCampaign"),
+      // Optional attribution must never block an otherwise valid application.
+      page: formString(formData, "sourcePage", 200),
+      cta: formString(formData, "sourceCta", 80),
+      utmSource: formString(formData, "utmSource", 120),
+      utmMedium: formString(formData, "utmMedium", 120),
+      utmCampaign: formString(formData, "utmCampaign", 120),
     },
   });
 }

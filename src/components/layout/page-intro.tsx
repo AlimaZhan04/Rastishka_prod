@@ -13,7 +13,7 @@ export function PageIntro({
   children?: ReactNode;
 }) {
   return (
-    <header className="relative isolate overflow-hidden border-b border-white/75 bg-white/42">
+    <header className="section-wash relative isolate overflow-hidden [--section-tint:rgba(255,255,255,0.42)]">
       <div
         className="bg-brand-mint-soft/85 pointer-events-none absolute -top-32 -right-28 -z-10 size-80 rounded-[46%_54%_61%_39%/58%_40%_60%_42%]"
         aria-hidden="true"

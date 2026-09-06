@@ -62,4 +62,19 @@ describe("vacancy response payload", () => {
       message: "Тип файла не соответствует его расширению",
     });
   });
+
+  it("reports a named empty resume instead of silently dropping the attachment", () => {
+    const formData = validFormData();
+    formData.set("resumeFile", new File([], "resume.pdf", { type: "application/pdf" }));
+    expect(parseVacancyResponseFormData(formData)).toMatchObject({
+      success: false,
+      fieldErrors: { resumeFile: "Выберите файл резюме" },
+    });
+  });
+
+  it("allows a genuinely unselected optional resume control", () => {
+    const formData = validFormData();
+    formData.set("resumeFile", new File([], "", { type: "application/octet-stream" }));
+    expect(parseVacancyResponseFormData(formData)).toMatchObject({ success: true });
+  });
 });

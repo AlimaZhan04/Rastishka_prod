@@ -42,8 +42,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   phone: "+996 502 114 888",
   socials: {
     instagram: "https://www.instagram.com/rastishkasad/",
-    facebook: "https://www.facebook.com/people/Rastishka-Sad/",
-    threads: "https://www.threads.net/@rastishka",
+    facebook: "https://www.facebook.com/people/Rastishka-Sad/61577141936142/",
   },
   branches: [{ title: "Главный филиал", address: "г. Бишкек", lat: 42.8303178, lng: 74.5723253 }],
 };

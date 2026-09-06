@@ -69,3 +69,18 @@ export const stepSchemas = {
 } as const;
 
 export const TOTAL_STEPS = 7;
+
+/** Allows validation failures to reveal the step that owns the invalid input. */
+export const APPLICATION_FIELD_STEPS: Partial<Record<keyof ApplicationInput, number>> = {
+  visitFormat: 1,
+  individualNote: 1,
+  speech: 2,
+  behavior: 3,
+  behaviorNote: 3,
+  toilet: 4,
+  food: 5,
+  previousExperience: 6,
+  parentName: 7,
+  phone: 7,
+  consent: 7,
+};

@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { updateApplicationWorkflow } from "@/app/actions/admin-workflow";
 import { AdminPageHeader } from "@/components/admin/page-header";
+import { WorkflowForm } from "@/components/admin/workflow-form";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { APPLICATION_STATUS_LABELS, formatAdminDate } from "@/lib/admin-labels";
+import { formatAdminDate } from "@/lib/admin-labels";
 import {
   BEHAVIOR_LABELS,
   EXPERIENCE_LABELS,
@@ -40,7 +38,7 @@ export default async function ApplicationDetailPage({
       include: { childProfile: true },
     }),
     prisma.adminUser.findMany({
-      where: { active: true },
+      where: { active: true, OR: [{ role: "ADMIN" }, { canViewApplications: true }] },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
     }),
@@ -107,56 +105,7 @@ export default async function ApplicationDetailPage({
           ) : null}
         </div>
 
-        <form
-          action={updateApplicationWorkflow}
-          className="border-border bg-card h-fit space-y-5 rounded-2xl border p-5"
-        >
-          <input type="hidden" name="id" value={application.id} />
-          <h2 className="font-heading text-primary text-xl font-bold">Работа с заявкой</h2>
-          <div className="space-y-2">
-            <Label htmlFor="application-status">Статус</Label>
-            <select
-              id="application-status"
-              name="status"
-              defaultValue={application.status}
-              className="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm"
-            >
-              {Object.entries(APPLICATION_STATUS_LABELS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="application-responsible">Ответственный</Label>
-            <select
-              id="application-responsible"
-              name="responsibleId"
-              defaultValue={application.responsibleId ?? ""}
-              className="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm"
-            >
-              <option value="">Не назначен</option>
-              {admins.map((admin) => (
-                <option key={admin.id} value={admin.id}>
-                  {admin.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="application-comment">Внутренний комментарий</Label>
-            <Textarea
-              id="application-comment"
-              name="adminComment"
-              defaultValue={application.adminComment ?? ""}
-              maxLength={5000}
-            />
-          </div>
-          <Button type="submit" className="w-full">
-            Сохранить
-          </Button>
-        </form>
+        <WorkflowForm kind="application" record={application} admins={admins} />
       </div>
     </>
   );

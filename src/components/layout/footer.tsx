@@ -54,6 +54,12 @@ export function Footer({ phone, socials }: { phone: string; socials: Socials }) 
               {item.label}
             </Link>
           ))}
+          <Link
+            href="/privacy"
+            className="text-muted-foreground hover:text-primary focus-visible:ring-ring/40 flex min-h-11 items-center rounded text-sm transition-colors focus-visible:ring-3 focus-visible:outline-none"
+          >
+            Персональные данные
+          </Link>
         </nav>
 
         <div className="flex flex-col gap-4">

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { optionalImageUrlSchema } from "@/lib/admin-content-validation";
 import { requireAdminAction } from "@/lib/server/admin-auth";
 import { writeAdminAudit } from "@/lib/server/admin-audit";
 
@@ -16,7 +17,6 @@ const slugSchema = z
   .max(160, "Slug слишком длинный")
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Только латинские буквы, цифры и дефисы");
 
-const optionalUrl = z.union([z.literal(""), z.url("Некорректная ссылка")]);
 const contentStatus = z.enum(["DRAFT", "PUBLISHED", "HIDDEN", "ARCHIVED"]);
 
 const newsSchema = z
@@ -26,9 +26,9 @@ const newsSchema = z
     slug: slugSchema,
     shortText: z.string().trim().min(10, "Добавьте краткое описание").max(500),
     fullText: z.string().trim().min(20, "Добавьте полный текст"),
-    image: optionalUrl,
+    image: optionalImageUrlSchema,
     alt: z.string().trim().max(200),
-    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Укажите дату"),
+    date: z.iso.date("Укажите существующую дату"),
     status: contentStatus,
     seoTitle: z.string().trim().max(180),
     seoDescription: z.string().trim().max(320),
@@ -99,6 +99,7 @@ export async function saveNews(
         select: { slug: true, status: true, publishedAt: true },
       })
     : null;
+  if (data.id && !existing) return { message: "Новость больше не существует. Обновите список." };
   try {
     const news = data.id
       ? await prisma.news.update({
@@ -144,10 +145,11 @@ export async function saveNews(
       diff: { status: news.status, slug: news.slug },
     });
     revalidatePath("/news");
+    revalidatePath("/admin/news");
+    revalidatePath("/admin");
     revalidatePath("/");
     revalidatePath(`/news/${news.slug}`);
     if (existing?.slug && existing.slug !== news.slug) revalidatePath(`/news/${existing.slug}`);
-    redirect("/admin/news");
   } catch (error) {
     if (isUniqueError(error))
       return {
@@ -156,6 +158,7 @@ export async function saveNews(
       };
     throw error;
   }
+  redirect("/admin/news");
 }
 
 export async function archiveNews(formData: FormData): Promise<void> {
@@ -206,6 +209,7 @@ export async function saveVacancy(
         select: { slug: true, status: true, publishedAt: true },
       })
     : null;
+  if (data.id && !existing) return { message: "Вакансия больше не существует. Обновите список." };
   try {
     const vacancy = data.id
       ? await prisma.vacancy.update({
@@ -252,10 +256,11 @@ export async function saveVacancy(
       diff: { status: vacancy.status, slug: vacancy.slug, sortOrder: vacancy.sortOrder },
     });
     revalidatePath("/vacancies");
+    revalidatePath("/admin/vacancies");
+    revalidatePath("/admin");
     revalidatePath(`/vacancies/${vacancy.slug}`);
     if (existing?.slug && existing.slug !== vacancy.slug)
       revalidatePath(`/vacancies/${existing.slug}`);
-    redirect("/admin/vacancies");
   } catch (error) {
     if (isUniqueError(error))
       return {
@@ -264,6 +269,7 @@ export async function saveVacancy(
       };
     throw error;
   }
+  redirect("/admin/vacancies");
 }
 
 export async function archiveVacancy(formData: FormData): Promise<void> {

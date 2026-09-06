@@ -27,6 +27,15 @@ export const ADMIN_ROLE_LABELS = {
   CONTENT_MANAGER: "Контент-менеджер",
 } as const;
 
+export function formatAdminDateInput(value: Date): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Asia/Bishkek",
+  }).format(value);
+}
+
 export function formatAdminDate(value: Date): string {
   return new Intl.DateTimeFormat("ru-RU", {
     dateStyle: "medium",
