@@ -7,7 +7,7 @@ import { DoodleHeart } from "@/components/brand/brand-motifs";
 
 export function ContactsSection({ settings }: { settings: SiteSettings }) {
   return (
-    <section className="py-14 sm:py-18" aria-labelledby="contacts-title">
+    <section className="px-5 py-14 sm:px-6 sm:py-18 lg:px-8" aria-labelledby="contacts-title">
       <div className="shadow-soft relative mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-[2rem] border border-white/85 bg-white/62 px-5 py-8 sm:px-8 sm:py-10 md:grid-cols-[0.82fr_1.18fr] lg:px-12">
         <DoodleHeart className="text-brand-pink/60 absolute top-4 -right-2 size-18 rotate-12" />
         <div className="reveal-on-scroll">
@@ -37,7 +37,9 @@ export function ContactsSection({ settings }: { settings: SiteSettings }) {
         <div className="grid gap-4 sm:grid-cols-2">
           {settings.branches.map((branch) => {
             const search =
-              branch.lat && branch.lng ? `${branch.lat},${branch.lng}` : branch.address;
+              branch.lat != null && branch.lng != null
+                ? `${branch.lat},${branch.lng}`
+                : branch.address;
             return (
               <a
                 key={`${branch.title}-${branch.address}`}

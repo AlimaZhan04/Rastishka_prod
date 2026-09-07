@@ -37,14 +37,16 @@ export default async function ContactsPage() {
           <div className={cn("grid gap-4", settings.branches.length > 1 && "sm:grid-cols-2")}>
             {settings.branches.map((branch) => {
               const search =
-                branch.lat && branch.lng ? `${branch.lat},${branch.lng}` : branch.address;
+                branch.lat != null && branch.lng != null
+                  ? `${branch.lat},${branch.lng}`
+                  : branch.address;
               return (
                 <a
                   key={`${branch.title}-${branch.address}`}
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(search)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="reveal-scale-on-scroll group bg-card shadow-soft hover:border-brand-mint hover:shadow-card-hover rounded-[1.6rem] border border-white/85 p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1"
+                  className="group bg-card shadow-soft hover:border-brand-mint hover:shadow-card-hover focus-visible:ring-ring/50 rounded-[1.6rem] border border-white/85 p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 focus-visible:ring-3 focus-visible:outline-none"
                 >
                   <span className="bg-brand-mint-soft text-brand-teal grid size-12 place-items-center rounded-2xl transition-transform duration-300 group-hover:-rotate-3">
                     <MapPin className="size-6" aria-hidden="true" />

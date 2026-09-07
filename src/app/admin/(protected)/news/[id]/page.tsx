@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { NewsForm } from "@/components/admin/content-forms";
 import { prisma } from "@/lib/db";
+import { formatAdminDateInput } from "@/lib/admin-labels";
 import { requireAdminPage } from "@/lib/server/admin-auth";
 
 export default async function EditNewsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -12,7 +13,7 @@ export default async function EditNewsPage({ params }: { params: Promise<{ id: s
   return (
     <>
       <AdminPageHeader title="Редактирование новости" description={news.title} />
-      <NewsForm news={{ ...news, date: news.date.toISOString().slice(0, 10) }} />
+      <NewsForm news={{ ...news, date: formatAdminDateInput(news.date) }} />
     </>
   );
 }

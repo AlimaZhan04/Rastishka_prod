@@ -15,6 +15,7 @@ export async function loginAdmin(
       login: formData.get("login"),
       password: formData.get("password"),
       redirectTo: "/admin",
+      redirect: false,
     });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -22,7 +23,9 @@ export async function loginAdmin(
     }
     throw error;
   }
-  return {};
+  // Keep the navigation on the request's origin, even if a previous deployment's
+  // AUTH_URL/NEXTAUTH_URL is still configured in the authentication environment.
+  redirect("/admin");
 }
 
 export async function logoutAdmin(): Promise<never> {

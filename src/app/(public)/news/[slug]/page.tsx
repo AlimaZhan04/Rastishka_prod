@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { ContentImage } from "@/components/content/content-image";
 import { notFound } from "next/navigation";
 import { CalendarDays } from "lucide-react";
 import { ContentDate } from "@/components/content/content-date";
@@ -45,30 +45,19 @@ export default async function NewsDetailPage({ params }: PageProps) {
           <p className="text-muted-foreground mt-4 text-lg leading-7">{item.shortText}</p>
         </div>
 
-        {item.image ? (
-          <div
-            role="img"
-            aria-label={item.alt || item.title}
-            className="shadow-soft mt-8 aspect-[16/9] rounded-[2rem] border-4 border-white/90 bg-cover bg-center"
-            style={{ backgroundImage: `url("${item.image}")` }}
+        <div className="shadow-soft bg-brand-mint-soft relative mt-8 aspect-[16/9] overflow-hidden rounded-[2rem] border border-white/60">
+          <ContentImage
+            src={item.image}
+            alt={item.image ? item.alt || item.title : "Тёплое развивающее занятие в РАСтишке"}
+            eager
+            sizes="(max-width: 1023px) 92vw, 60rem"
+            className="object-cover"
           />
-        ) : (
-          <div className="shadow-soft relative mt-8 aspect-[16/9] overflow-hidden rounded-[2rem] border-4 border-white/90">
-            <Image
-              src="/images/rastishka-hero-v1.png"
-              alt="Тёплое развивающее занятие в РАСтишке"
-              fill
-              loading="eager"
-              fetchPriority="high"
-              sizes="(max-width: 1023px) 92vw, 64rem"
-              className="object-cover"
-            />
-            <div
-              className="from-primary/12 absolute inset-0 bg-gradient-to-t via-transparent to-white/10"
-              aria-hidden="true"
-            />
-          </div>
-        )}
+          <div
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_60%,rgba(247,241,234,0.3)_100%)]"
+            aria-hidden="true"
+          />
+        </div>
 
         <div className="border-brand-mint/35 text-foreground mx-auto mt-8 max-w-3xl rounded-[1.75rem] border bg-white/78 p-6 text-base leading-8 whitespace-pre-line shadow-sm sm:p-9">
           {item.fullText}

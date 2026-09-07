@@ -53,4 +53,28 @@ describe("application form payload", () => {
     formData.set("website", "bot");
     expect(validateSubmissionGuard(formData).ok).toBe(false);
   });
+
+  it("keeps missing contact errors readable for parents", () => {
+    const formData = validFormData();
+    formData.delete("parentName");
+    formData.set("phone", " ");
+    const parsed = parseApplicationFormData(formData);
+    expect(parsed.success).toBe(false);
+    if (parsed.success) return;
+    expect(getApplicationFieldErrors(parsed.error)).toMatchObject({
+      parentName: "Минимум 2 символа",
+      phone: "Введите номер в формате +996 XXX XXX XXX",
+    });
+  });
+
+  it("does not let a long campaign URL block a valid application", () => {
+    const formData = validFormData();
+    formData.set("utmCampaign", "campaign".repeat(40));
+    formData.set("sourcePage", `/${"page".repeat(60)}`);
+    const parsed = parseApplicationFormData(formData);
+    expect(parsed.success).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.source?.utmCampaign).toHaveLength(120);
+    expect(parsed.data.source?.page).toHaveLength(200);
+  });
 });

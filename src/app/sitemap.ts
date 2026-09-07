@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
 import { listPublishedNews } from "@/lib/content/news";
 import { listPublishedVacancySlugs } from "@/lib/content/vacancies";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ras-tishka.kg";
+import { SITE_URL as siteUrl } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/news`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${siteUrl}/vacancies`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${siteUrl}/contacts`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${siteUrl}/privacy`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   return [

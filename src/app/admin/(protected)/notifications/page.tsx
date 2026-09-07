@@ -161,7 +161,9 @@ export default async function NotificationsPage({
                   </TableCell>
                   <TableCell>{log.retryCount}</TableCell>
                   <TableCell>
-                    {log.status === "FAILED" ? (
+                    {log.status === "FAILED" &&
+                    log.channel === "TELEGRAM" &&
+                    (log.eventType === "NEW_APPLICATION" || log.eventType === "NEW_RESPONSE") ? (
                       <form action={retryNotification}>
                         <input type="hidden" name="id" value={log.id} />
                         <Button type="submit" size="sm" variant="ghost">

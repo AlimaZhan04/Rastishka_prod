@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { ContentImage } from "@/components/content/content-image";
 import { ArrowRight, Blocks, Palette, Sprout } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContentDate } from "@/components/content/content-date";
@@ -34,33 +34,30 @@ export function NewsCard({
   return (
     <Card
       className={cn(
-        "reveal-scale-on-scroll shadow-soft hover:border-brand-mint/65 hover:shadow-card-hover h-full rounded-[1.6rem] border border-white/85 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1",
+        "shadow-soft hover:border-brand-mint/65 hover:shadow-card-hover h-full rounded-[1.6rem] border border-white/85 pt-0 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1",
         featured && "lg:row-span-2",
       )}
     >
-      {item.image ? (
+      {item.image || featured ? (
         <div
-          role="img"
-          aria-label={item.alt || item.title}
           className={cn(
-            "aspect-[16/9] bg-cover bg-center transition-transform duration-500 group-hover/card:scale-[1.025]",
+            "bg-brand-mint-soft relative aspect-[16/9] overflow-hidden",
             featured && "lg:aspect-auto lg:min-h-96 lg:flex-1",
           )}
-          style={{ backgroundImage: `url("${item.image}")` }}
-        />
-      ) : featured ? (
-        <div className="relative aspect-[16/9] overflow-hidden lg:aspect-auto lg:min-h-96 lg:flex-1">
-          <Image
-            src="/images/rastishka-hero-v1.png"
-            alt="Тёплое развивающее занятие в РАСтишке"
-            fill
-            loading={eagerImage ? "eager" : "lazy"}
-            fetchPriority={eagerImage ? "high" : "auto"}
-            sizes="(max-width: 1023px) 100vw, 55vw"
-            className="object-cover transition-transform duration-500 group-hover/card:scale-[1.025]"
+        >
+          <ContentImage
+            src={item.image}
+            alt={item.image ? item.alt || item.title : "Тёплое развивающее занятие в РАСтишке"}
+            eager={eagerImage}
+            sizes={
+              featured
+                ? "(max-width: 1023px) 92vw, (max-width: 1279px) 55vw, 44rem"
+                : "(max-width: 1023px) 92vw, (max-width: 1279px) 40vw, 31rem"
+            }
+            className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-[1.015] motion-reduce:transform-none"
           />
           <div
-            className="from-primary/12 absolute inset-0 bg-gradient-to-t via-transparent to-white/10"
+            className="from-card pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t to-transparent"
             aria-hidden="true"
           />
         </div>
@@ -78,6 +75,7 @@ export function NewsCard({
           <span className="shadow-soft text-primary/75 grid size-24 place-items-center rounded-[2rem] border border-white/80 bg-white/58 backdrop-blur-sm transition-transform duration-500 group-hover/card:scale-105 group-hover/card:rotate-3">
             <FallbackIcon slug={item.slug} />
           </span>
+          <div className="from-card pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t to-transparent" />
         </div>
       )}
       <CardHeader>
@@ -95,6 +93,7 @@ export function NewsCard({
       <CardFooter>
         <Link
           href={`/news/${item.slug}`}
+          aria-label={`Читать новость: ${item.title}`}
           className="text-primary focus-visible:ring-ring/40 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold hover:underline focus-visible:rounded focus-visible:ring-3 focus-visible:outline-none"
         >
           Читать новость <ArrowRight className="size-4" aria-hidden="true" />

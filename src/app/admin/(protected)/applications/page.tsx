@@ -9,15 +9,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatAdminDate } from "@/lib/admin-labels";
+import { formatAdminDate, APPLICATION_STATUS_LABELS } from "@/lib/admin-labels";
+import { AdminListFilters, AdminPagination } from "@/components/admin/list-controls";
+import {
+  ADMIN_PAGE_SIZE,
+  parseAdminListQuery,
+  type AdminListSearchParams,
+} from "@/lib/admin-list-query";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { requireAdminPage } from "@/lib/server/admin-auth";
 
-export default async function ApplicationsPage() {
+export default async function ApplicationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<AdminListSearchParams>;
+}) {
   await requireAdminPage("applications");
+  const query = parseAdminListQuery(await searchParams, APPLICATION_STATUS_LABELS);
+  const where: Prisma.ApplicationWhereInput = {
+    status: query.status,
+    ...(query.q
+      ? {
+          OR: [
+            { parentName: { contains: query.q, mode: "insensitive" } },
+            { phone: { contains: query.q.replace(/[\s()-]/g, ""), mode: "insensitive" } },
+          ],
+        }
+      : {}),
+  };
+  const total = await prisma.application.count({ where });
+  const page = Math.min(query.page, Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
   const applications = await prisma.application.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 100,
+    where,
+    skip: (page - 1) * ADMIN_PAGE_SIZE,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    take: ADMIN_PAGE_SIZE,
     select: {
       id: true,
       parentName: true,
@@ -30,7 +57,16 @@ export default async function ApplicationsPage() {
 
   return (
     <>
-      <AdminPageHeader title="Заявки" description="Последние 100 заявок на консультацию." />
+      <AdminPageHeader
+        title="Заявки"
+        description="Заявки на консультацию: поиск, статусы и ответственные."
+      />
+      <AdminListFilters
+        path="/admin/applications"
+        q={query.q}
+        status={query.status}
+        statuses={APPLICATION_STATUS_LABELS}
+      />
       <div className="border-border bg-card overflow-hidden rounded-2xl border">
         <Table>
           <TableHeader>
@@ -64,13 +100,22 @@ export default async function ApplicationsPage() {
             {!applications.length ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-muted-foreground py-10 text-center">
-                  Заявок пока нет.
+                  {query.q || query.status
+                    ? "По заданным условиям ничего не найдено."
+                    : "Заявок пока нет."}
                 </TableCell>
               </TableRow>
             ) : null}
           </TableBody>
         </Table>
       </div>
+      <AdminPagination
+        path="/admin/applications"
+        q={query.q}
+        status={query.status}
+        page={page}
+        total={total}
+      />
     </>
   );
 }

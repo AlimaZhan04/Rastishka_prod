@@ -47,12 +47,31 @@ Env-переменные — см. [.env.example](.env.example).
 | `pnpm build` | production-сборка |
 | `pnpm typecheck` | проверка типов (`tsc --noEmit`) |
 | `pnpm lint` | ESLint |
+| `pnpm test --runInBand` | unit- и компонентные регрессионные тесты |
 | `pnpm format` | Prettier |
 | `pnpm db:push` | синхронизировать схему с БД (локально) |
 | `pnpm db:migrate` | создать миграцию (на изолированном PostgreSQL) |
 | `pnpm db:deploy` | применить миграции (prod) |
 | `pnpm db:seed` | наполнить БД начальными данными |
 | `pnpm db:studio` | Prisma Studio |
+
+### Проверка хранения резюме на PostgreSQL
+
+Для интеграционных тестов нужен запущенный локальный PostgreSQL и Node.js 24.9+.
+`DATABASE_URL` (или `POSTGRES_TEST_URL`) должен указывать на localhost: тесты создают
+отдельную временную схему, применяют миграции и удаляют только эту схему после проверки.
+Для Prisma Dev используйте отдельный экземпляр `pnpm exec prisma dev --detach --name rastishka-tests`
+и передайте выданный TCP-адрес в `POSTGRES_TEST_URL`: одновременная работа браузерного стенда
+с тем же встроенным сервером может вызывать ошибки протокола подготовленных запросов.
+Prisma 7 загружает ESM-компилятор, поэтому для этого набора нужен флаг VM Modules:
+
+```powershell
+$env:RUN_POSTGRES_INTEGRATION='1'
+node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand src/lib/server/vacancy-response-postgres.test.ts
+Remove-Item Env:RUN_POSTGRES_INTEGRATION
+```
+
+Без opt-in эти девять тестов пропускаются обычным `pnpm test`.
 
 ## Миграции и прод
 

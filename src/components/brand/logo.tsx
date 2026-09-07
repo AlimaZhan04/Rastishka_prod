@@ -1,11 +1,19 @@
 import Link from "next/link";
+import type { MouseEventHandler } from "react";
 import { cn } from "@/lib/utils";
 import { BrandMark } from "@/components/brand/brand-motifs";
 
-export function Logo({ className }: { className?: string }) {
+export function Logo({
+  className,
+  onClick,
+}: {
+  className?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+}) {
   return (
     <Link
       href="/"
+      onClick={onClick}
       aria-label="РАСтишка — на главную"
       className={cn(
         "group/logo focus-visible:ring-ring/45 inline-flex min-h-11 items-center gap-2.5 rounded-xl outline-none focus-visible:ring-3",

@@ -43,8 +43,10 @@ function selectedResume(formData: FormData): {
   error?: string;
 } {
   const candidate = formData.get("resumeFile");
-  if (typeof File === "undefined" || !(candidate instanceof File) || candidate.size === 0)
-    return {};
+  if (typeof File === "undefined" || !(candidate instanceof File)) return {};
+  // Browsers send an unnamed, empty File when the optional control has no selection.
+  // A named zero-byte upload is an invalid resume, not an omitted attachment.
+  if (candidate.size === 0 && !candidate.name) return {};
 
   const validation = validateResumeFile(candidate);
   if (!validation.ok) return { error: validation.message };
@@ -74,7 +76,7 @@ export function parseVacancyResponseFormData(formData: FormData): ParsedVacancyR
     experienceText: formString(formData, "experienceText"),
     consent: formData.get("consent") === "on",
     source: {
-      page: formString(formData, "sourcePage"),
+      page: formString(formData, "sourcePage")?.slice(0, 200),
     },
   });
   if (!parsed.success) return { success: false, fieldErrors: getFieldErrors(parsed.error) };

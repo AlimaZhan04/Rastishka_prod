@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { updateResponseWorkflow } from "@/app/actions/admin-workflow";
 import { AdminPageHeader } from "@/components/admin/page-header";
+import { WorkflowForm } from "@/components/admin/workflow-form";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { formatAdminDate, RESPONSE_STATUS_LABELS } from "@/lib/admin-labels";
+import { formatAdminDate } from "@/lib/admin-labels";
 import { prisma } from "@/lib/db";
 import { requireAdminPage } from "@/lib/server/admin-auth";
 import { getResumeDownloadUrl } from "@/lib/server/resume-storage";
@@ -20,7 +18,7 @@ export default async function ResponseDetailPage({ params }: { params: Promise<{
       include: { vacancy: { select: { title: true } } },
     }),
     prisma.adminUser.findMany({
-      where: { active: true },
+      where: { active: true, OR: [{ role: "ADMIN" }, { canViewResponses: true }] },
       select: { id: true, name: true },
       orderBy: { name: "asc" },
     }),
@@ -88,56 +86,7 @@ export default async function ResponseDetailPage({ params }: { params: Promise<{
             </div>
           </dl>
         </section>
-        <form
-          action={updateResponseWorkflow}
-          className="border-border bg-card h-fit space-y-5 rounded-2xl border p-5"
-        >
-          <input type="hidden" name="id" value={response.id} />
-          <h2 className="font-heading text-primary text-xl font-bold">Работа с откликом</h2>
-          <div className="space-y-2">
-            <Label htmlFor="response-status">Статус</Label>
-            <select
-              id="response-status"
-              name="status"
-              defaultValue={response.status}
-              className="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm"
-            >
-              {Object.entries(RESPONSE_STATUS_LABELS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="response-responsible">Ответственный</Label>
-            <select
-              id="response-responsible"
-              name="responsibleId"
-              defaultValue={response.responsibleId ?? ""}
-              className="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm"
-            >
-              <option value="">Не назначен</option>
-              {admins.map((admin) => (
-                <option key={admin.id} value={admin.id}>
-                  {admin.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="response-comment">Внутренний комментарий</Label>
-            <Textarea
-              id="response-comment"
-              name="adminComment"
-              defaultValue={response.adminComment ?? ""}
-              maxLength={5000}
-            />
-          </div>
-          <Button type="submit" className="w-full">
-            Сохранить
-          </Button>
-        </form>
+        <WorkflowForm kind="response" record={response} admins={admins} />
       </div>
     </>
   );

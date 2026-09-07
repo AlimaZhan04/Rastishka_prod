@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated browser captures and document build scripts are not application sources.
+    "output/**",
+    ".playwright-cli/**",
+    ".codex-artifacts/**",
   ]),
 ]);
 

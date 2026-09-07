@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { hash } from "@node-rs/argon2";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { optionalImageUrlSchema, optionalWebUrlSchema } from "@/lib/admin-content-validation";
 import { requireAdminAction } from "@/lib/server/admin-auth";
 import { writeAdminAudit } from "@/lib/server/admin-audit";
 import {
@@ -13,20 +14,36 @@ import {
   sendTelegramConnectivityTest,
 } from "@/lib/server/telegram-notifier";
 
-const optionalUrl = z.union([z.literal(""), z.url("Некорректная ссылка")]);
 const siteSettingsSchema = z.object({
   heroTitle: z.string().trim().min(5).max(200),
   heroSubtitle: z.string().trim().min(10).max(500),
-  heroImageUrl: optionalUrl,
+  heroImageUrl: optionalImageUrlSchema,
   heroImageAlt: z.string().trim().min(3).max(200),
-  phone: z.string().trim().min(8).max(30),
-  instagram: optionalUrl,
-  facebook: optionalUrl,
-  threads: optionalUrl,
+  phone: z
+    .string()
+    .trim()
+    .max(30)
+    .refine(
+      (value) => /^\+\d{8,15}$/.test(value.replace(/[\s()-]/g, "")),
+      "Укажите телефон с кодом страны, например +996 502 114 888",
+    ),
+  instagram: optionalWebUrlSchema,
+  facebook: optionalWebUrlSchema,
+  threads: optionalWebUrlSchema,
   branchTitle: z.string().trim().min(2).max(120),
   branchAddress: z.string().trim().min(2).max(240),
-  branchLat: z.coerce.number().min(-90).max(90),
-  branchLng: z.coerce.number().min(-180).max(180),
+  branchLat: z
+    .string()
+    .trim()
+    .min(1, "Укажите широту")
+    .transform(Number)
+    .pipe(z.number().min(-90).max(90)),
+  branchLng: z
+    .string()
+    .trim()
+    .min(1, "Укажите долготу")
+    .transform(Number)
+    .pipe(z.number().min(-180).max(180)),
   audience: z
     .array(
       z.object({
@@ -86,61 +103,48 @@ export async function saveSiteSettings(
   if (!parsed.success)
     return { message: "Проверьте настройки сайта", fieldErrors: mapErrors(parsed.error) };
   const data = parsed.data;
+  const previous = await prisma.siteSetting.findUnique({
+    where: { id: "singleton" },
+    select: { data: true },
+  });
+  const stored = previous?.data;
+  const previousData = stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
+  const previousBranches = Array.isArray(previousData.branches) ? previousData.branches : [];
+  const firstBranch = previousBranches[0];
+  const previousBranch =
+    firstBranch && typeof firstBranch === "object" && !Array.isArray(firstBranch)
+      ? firstBranch
+      : {};
+  const settingsData = {
+    ...previousData,
+    hero: {
+      title: data.heroTitle,
+      subtitle: data.heroSubtitle,
+      imageUrl: data.heroImageUrl || undefined,
+      imageAlt: data.heroImageAlt,
+    },
+    audience: data.audience,
+    phone: data.phone,
+    socials: {
+      instagram: data.instagram || undefined,
+      facebook: data.facebook || undefined,
+      threads: data.threads || undefined,
+    },
+    branches: [
+      {
+        ...previousBranch,
+        title: data.branchTitle,
+        address: data.branchAddress,
+        lat: data.branchLat,
+        lng: data.branchLng,
+      },
+      ...previousBranches.slice(1),
+    ],
+  };
   await prisma.siteSetting.upsert({
     where: { id: "singleton" },
-    update: {
-      data: {
-        hero: {
-          title: data.heroTitle,
-          subtitle: data.heroSubtitle,
-          imageUrl: data.heroImageUrl || undefined,
-          imageAlt: data.heroImageAlt,
-        },
-        audience: data.audience,
-        phone: data.phone,
-        socials: {
-          instagram: data.instagram || undefined,
-          facebook: data.facebook || undefined,
-          threads: data.threads || undefined,
-        },
-        branches: [
-          {
-            title: data.branchTitle,
-            address: data.branchAddress,
-            lat: data.branchLat,
-            lng: data.branchLng,
-          },
-        ],
-      },
-      updatedById: actor.id,
-    },
-    create: {
-      id: "singleton",
-      data: {
-        hero: {
-          title: data.heroTitle,
-          subtitle: data.heroSubtitle,
-          imageUrl: data.heroImageUrl || undefined,
-          imageAlt: data.heroImageAlt,
-        },
-        audience: data.audience,
-        phone: data.phone,
-        socials: {
-          instagram: data.instagram || undefined,
-          facebook: data.facebook || undefined,
-          threads: data.threads || undefined,
-        },
-        branches: [
-          {
-            title: data.branchTitle,
-            address: data.branchAddress,
-            lat: data.branchLat,
-            lng: data.branchLng,
-          },
-        ],
-      },
-      updatedById: actor.id,
-    },
+    update: { data: settingsData, updatedById: actor.id },
+    create: { id: "singleton", data: settingsData, updatedById: actor.id },
   });
   await writeAdminAudit({
     userId: actor.id,
@@ -148,8 +152,8 @@ export async function saveSiteSettings(
     entityType: "SiteSetting",
     entityId: "singleton",
   });
-  revalidatePath("/");
-  revalidatePath("/contacts");
+  revalidatePath("/", "layout");
+  revalidatePath("/admin/settings");
   return { success: true, message: "Настройки сайта сохранены" };
 }
 
@@ -199,8 +203,23 @@ export async function retryNotification(formData: FormData): Promise<never> {
   const id = z.string().min(1).parse(formData.get("id"));
   const notification = await prisma.notificationLog.findUniqueOrThrow({
     where: { id },
-    select: { eventType: true, applicationId: true, vacancyResponseId: true },
+    select: {
+      eventType: true,
+      channel: true,
+      status: true,
+      applicationId: true,
+      vacancyResponseId: true,
+    },
   });
+  if (notification.channel !== "TELEGRAM" || notification.status !== "FAILED") {
+    redirect("/admin/notifications?retryError=1");
+  }
+  // Claim the failed delivery so double submissions cannot trigger duplicate sends.
+  const claimed = await prisma.notificationLog.updateMany({
+    where: { id, status: "FAILED" },
+    data: { status: "PENDING", retryCount: { increment: 1 } },
+  });
+  if (!claimed.count) redirect("/admin/notifications?retryError=1");
   let sent = false;
   try {
     if (notification.eventType === "NEW_APPLICATION" && notification.applicationId) {
@@ -209,9 +228,28 @@ export async function retryNotification(formData: FormData): Promise<never> {
       sent = await notifyNewVacancyResponseInTelegram(notification.vacancyResponseId);
     }
   } catch {
+    await prisma.notificationLog.update({
+      where: { id },
+      data: { status: "FAILED", error: "Telegram delivery failed" },
+    });
+    revalidatePath("/admin/notifications");
     redirect("/admin/notifications?retryError=1");
   }
-  if (!sent) redirect("/admin/notifications?retryError=1");
+  if (!sent) {
+    await prisma.notificationLog.update({
+      where: { id },
+      data: {
+        status: "FAILED",
+        error: "Telegram is disabled or the notification reference is unavailable",
+      },
+    });
+    revalidatePath("/admin/notifications");
+    redirect("/admin/notifications?retryError=1");
+  }
+  await prisma.notificationLog.update({
+    where: { id },
+    data: { status: "SENT", error: null },
+  });
   await writeAdminAudit({
     userId: actor.id,
     action: "notification.retried",
@@ -272,6 +310,8 @@ export async function saveAdminUser(
         select: { role: true, active: true },
       })
     : null;
+  if (data.id && !existing)
+    return { message: "Пользователь больше не существует. Обновите список." };
   if (existing?.role === "ADMIN" && existing.active && (!active || data.role !== "ADMIN")) {
     const activeAdmins = await prisma.adminUser.count({ where: { role: "ADMIN", active: true } });
     if (activeAdmins <= 1)

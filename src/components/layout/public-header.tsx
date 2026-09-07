@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { SocialLinks } from "@/components/brand/social-links";
@@ -24,22 +24,25 @@ const NAV = [
 export function PublicHeader({ phone, socials }: { phone: string; socials: Socials }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
   const canGoBack = pathname !== "/";
-
-  function goBack() {
-    if (window.history.length > 1) router.back();
-    else router.push("/");
-  }
+  const backLink = pathname.startsWith("/news/")
+    ? { href: "/news", label: "К новостям" }
+    : pathname.startsWith("/vacancies/")
+      ? { href: "/vacancies", label: "К вакансиям" }
+      : { href: "/", label: "На главную" };
 
   return (
     <header className="border-border/55 bg-background/88 sticky top-0 z-40 border-b shadow-[0_10px_30px_-28px_rgba(126,42,61,0.55)] backdrop-blur-xl">
       <div className="mx-auto flex h-[4.75rem] max-w-7xl items-center justify-between gap-4 px-5 sm:px-6 lg:h-21 lg:px-8">
         <div className="flex min-w-0 items-center gap-1.5">
           {canGoBack ? (
-            <Button type="button" variant="ghost" size="icon" onClick={goBack} aria-label="Назад">
+            <Link
+              href={backLink.href}
+              aria-label={backLink.label}
+              className="hover:bg-secondary focus-visible:ring-ring/50 grid size-11 shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-3 focus-visible:outline-none"
+            >
               <ArrowLeft className="size-5" aria-hidden="true" />
-            </Button>
+            </Link>
           ) : null}
           <Logo />
         </div>
@@ -48,7 +51,7 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
         <div className="hidden items-center gap-5 lg:flex">
           <SocialLinks socials={socials} />
           <PhoneLink phone={phone} />
-          <AnketaTrigger ctaSource="header" className="h-10 rounded-full px-5">
+          <AnketaTrigger ctaSource="header" className="h-11 rounded-full px-5">
             Записаться
           </AnketaTrigger>
         </div>
@@ -61,15 +64,15 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="border-l-brand-mint/40 bg-background w-[min(88vw,22rem)]"
+              aria-label="Меню сайта"
+              className="border-l-brand-mint/40 bg-background overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))] data-[side=right]:w-[min(88vw,22rem)]"
             >
               <SheetHeader className="border-border/60 border-b pb-5">
-                <SheetTitle>
-                  <Logo />
-                </SheetTitle>
+                <SheetTitle className="sr-only">Меню сайта</SheetTitle>
+                <Logo onClick={() => setOpen(false)} />
               </SheetHeader>
 
-              <nav className="flex flex-col gap-1 px-4">
+              <nav aria-label="Основная навигация" className="flex flex-col gap-1 px-4">
                 {NAV.map((item) => (
                   <Link
                     key={item.href}
@@ -85,7 +88,7 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
                           : undefined
                     }
                     className={cn(
-                      "text-foreground min-h-11 rounded-xl px-3.5 py-3 text-base font-semibold transition-colors",
+                      "text-foreground focus-visible:ring-ring/50 min-h-11 rounded-xl px-3.5 py-3 text-base font-semibold transition-colors focus-visible:ring-3 focus-visible:outline-none",
                       (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href))
                         ? "bg-brand-mint-soft text-brand-teal"
                         : "hover:bg-secondary",
@@ -111,6 +114,28 @@ export function PublicHeader({ phone, socials }: { phone: string; socials: Socia
           </Sheet>
         </div>
       </div>
+      <nav aria-label="Основная навигация" className="border-border/45 hidden border-t lg:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-8 py-1">
+          {NAV.map((item) => {
+            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "focus-visible:ring-ring/50 inline-flex min-h-11 items-center rounded-full px-5 text-sm font-semibold transition-colors focus-visible:ring-3 focus-visible:outline-none",
+                  active
+                    ? "bg-brand-mint-soft text-brand-teal"
+                    : "text-muted-foreground hover:bg-secondary hover:text-primary",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </header>
   );
 }
