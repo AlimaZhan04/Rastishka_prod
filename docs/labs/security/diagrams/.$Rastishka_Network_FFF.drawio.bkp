@@ -1,0 +1,696 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mxfile host="Electron" agent="Codex" pages="2">
+  <diagram id="view-1" name="01 · Сетевая топология">
+    <mxGraphModel dx="2138" dy="1196" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2300" pageHeight="1840" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" style=""/>
+        <mxCell id="1" parent="0" style=""/>
+        <mxCell id="text-1" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=right;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" value="01 / 02" vertex="1">
+          <mxGeometry height="24" width="78" x="2174" y="23" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-2" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=38;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Сетевая инфраструктура «РАСтишки»" vertex="1">
+          <mxGeometry height="48" width="2204" x="48" y="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="top-rule" parent="1" style="fillColor=#151515;strokeColor=none;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="2" width="2204" x="48" y="151" as="geometry"/>
+        </mxCell>
+        <mxCell id="bottom-rule" parent="1" style="fillColor=#b1b1b1;strokeColor=none;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="1" width="2204" x="48" y="1792" as="geometry"/>
+        </mxCell>
+        <mxCell id="client-zone" parent="1" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="812" width="938" x="48" y="176" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-5" connectable="0" parent="client-zone" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="01 КЛИЕНТСКИЕ СЕТИ / ПРИМЕРЫ ОБОРУДОВАНИЯ" vertex="1">
+          <mxGeometry height="33" width="902" x="18" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="cloud-zone" parent="1" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" value="" vertex="1">
+          <mxGeometry height="1110" width="970" x="1282" y="176" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-6" connectable="0" parent="cloud-zone" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="02 RAILWAY / ЦЕЛЕВОЕ РАЗМЕЩЕНИЕ WAF" vertex="1">
+          <mxGeometry height="33" width="934" x="18" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="ops-zone" parent="1" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="604" width="1180" x="48" y="1020" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-7" connectable="0" parent="ops-zone" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="03 РАБОЧИЕ МЕСТА, РАЗРАБОТКА И ВЫПУСК" vertex="1">
+          <mxGeometry height="33" width="1144" x="18" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext-zone" parent="1" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="294" width="970" x="1282" y="1330" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-8" connectable="0" parent="ext-zone" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="04 ВНЕШНИЕ СЕРВИСЫ" vertex="1">
+          <mxGeometry height="33" width="934" x="18" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="parent" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="192" width="224" x="71" y="236" as="geometry"/>
+        </mxCell>
+        <mxCell id="parent-picture" connectable="0" parent="parent" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHg9IjM2IiB5PSI1IiB3aWR0aD0iNDgiIGhlaWdodD0iNzAiIHJ4PSI4IiBmaWxsPSIjMzYzNjM2Ii8+PHJlY3QgeD0iNDAiIHk9IjEwIiB3aWR0aD0iNDAiIGhlaWdodD0iNTkiIHJ4PSI1IiBmaWxsPSIjZTVlNWU1Ii8+PHJlY3QgeD0iNTEiIHk9IjEwIiB3aWR0aD0iMTgiIGhlaWdodD0iNSIgcng9IjIiIGZpbGw9IiMzNjM2MzYiLz48cmVjdCB4PSI1MSIgeT0iNjQiIHdpZHRoPSIxOCIgaGVpZ2h0PSIyIiByeD0iMSIgZmlsbD0iIzM2MzYzNiIvPjwvc3ZnPg==;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-9" connectable="0" parent="parent" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Родитель" vertex="1">
+          <mxGeometry height="44" width="118" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-10" connectable="0" parent="parent" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Apple iPhone 13 · 128 ГБ&#10;A15 Bionic · 6 ядер CPU&#10;OLED 6,1″ · 2532 × 1170&#10;iOS 17+ · Apple Safari&#10;WebKit · JavaScript · HTTPS" vertex="1">
+          <mxGeometry height="117" width="200" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="home" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="192" width="285" x="333" y="236" as="geometry"/>
+        </mxCell>
+        <mxCell id="home-picture" connectable="0" parent="home" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yMCA0MkwxNCAxMG0yNiAyOVY1bTM4IDM0VjVtMjIgMzYgNi0zMSIgc3Ryb2tlPSIjM2IzYjNiIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xMiA0N2wxNS0xM2g2NmwxNSAxMy0xMiAxNUgyNHoiIGZpbGw9IiM3NTc1NzUiIHN0cm9rZT0iIzM4MzgzOCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDQ3aDk2djEzbC0xMiA2SDI0bC0xMi02eiIgZmlsbD0iIzQwNDA0MCIvPjxwYXRoIGQ9Ik0zMCA0NGg1OG0tNTMtNWg0OCIgc3Ryb2tlPSIjYTZhNmE2IiBzdHJva2Utd2lkdGg9IjIiLz48Y2lyY2xlIGN4PSI1MSIgY3k9IjU1IiByPSIyIiBmaWxsPSIjZGVkZWRlIi8+PGNpcmNsZSBjeD0iNTkiIGN5PSI1NSIgcj0iMiIgZmlsbD0iI2RlZGVkZSIvPjxjaXJjbGUgY3g9IjY3IiBjeT0iNTUiIHI9IjIiIGZpbGw9IiNkZWRlZGUiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-11" connectable="0" parent="home" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="TP-Link Archer&#10;AX23" vertex="1">
+          <mxGeometry height="44" width="179" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-12" connectable="0" parent="home" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Wi-Fi 6 · AX1800&#10;5 ГГц: до 1201 Мбит/с&#10;2,4 ГГц: до 574 Мбит/с&#10;1 WAN + 4 LAN · 1 Гбит/с&#10;DHCP / NAT · поддержка WPA3" vertex="1">
+          <mxGeometry height="117" width="261" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="fixed" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="192" width="285" x="660" y="236" as="geometry"/>
+        </mxCell>
+        <mxCell id="fixed-picture" connectable="0" parent="fixed" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHg9IjEyIiB5PSIzMiIgd2lkdGg9Ijk2IiBoZWlnaHQ9IjMxIiByeD0iNiIgZmlsbD0iI2RjZGNkYyIgc3Ryb2tlPSIjNDg0ODQ4IiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMjQgNDhoMjBtLTIwIDZoMjgiIHN0cm9rZT0iIzZhNmE2YSIgc3Ryb2tlLXdpZHRoPSIyIi8+PGNpcmNsZSBjeD0iODgiIGN5PSI0NyIgcj0iNCIgZmlsbD0iIzg0ODQ4NCIvPjxwYXRoIGQ9Ik02MSAzMlYxOGMwLTkgMTgtOSAxOCAwdjE0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0ODQ4NDgiIHN0cm9rZS13aWR0aD0iMyIvPjwvc3ZnPg==;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-13" connectable="0" parent="fixed" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Провайдер" vertex="1">
+          <mxGeometry height="44" width="179" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-14" connectable="0" parent="fixed" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Фиксированный канал&#10;IP-маршрутизация / DNS&#10;Скорость — по тарифу&#10;HTTPS до сайта: TCP 443&#10;Оборудование — у провайдера" vertex="1">
+          <mxGeometry height="117" width="261" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-0" edge="1" parent="1" source="parent" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="home">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-1" edge="1" parent="1" source="home" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="fixed">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-15" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="Wi-Fi" vertex="1">
+          <mxGeometry height="27" width="43" x="288" y="252" as="geometry"/>
+        </mxCell>
+        <mxCell id="candidate" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="206" width="249" x="71" y="477" as="geometry"/>
+        </mxCell>
+        <mxCell id="candidate-picture" connectable="0" parent="candidate" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHg9IjM0IiB5PSI1IiB3aWR0aD0iNTIiIGhlaWdodD0iNzAiIHJ4PSI2IiBmaWxsPSIjM2MzYzNjIi8+PHJlY3QgeD0iMzgiIHk9IjkiIHdpZHRoPSI0NCIgaGVpZ2h0PSI2MiIgcng9IjQiIGZpbGw9IiNlNWU1ZTUiLz48Y2lyY2xlIGN4PSI2MCIgY3k9IjE0IiByPSIyIiBmaWxsPSIjM2MzYzNjIi8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-16" connectable="0" parent="candidate" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Кандидат" vertex="1">
+          <mxGeometry height="44" width="143" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-17" connectable="0" parent="candidate" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Samsung Galaxy A54 5G&#10;Exynos 1380 · 8 ядер CPU&#10;8 ГБ RAM · 128 ГБ&#10;6,4″ · 2340 × 1080 · 120 Гц&#10;Android 14+ · Google Chrome&#10;Chromium · JavaScript · HTTPS" vertex="1">
+          <mxGeometry height="131" width="225" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="radio" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="206" width="257" x="361" y="477" as="geometry"/>
+        </mxCell>
+        <mxCell id="radio-picture" connectable="0" parent="radio" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik00NCA3MmwxNi01NSAxNiA1NW0tMjUtMjBoMThtLTI0IDEzaDMwbS0yNS0xMiAyMiAxMm0tMi0xM0w0OCA2NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjM2YzZjNmIiBzdHJva2Utd2lkdGg9IjMiLz48Y2lyY2xlIGN4PSI2MCIgY3k9IjE2IiByPSI0IiBmaWxsPSIjM2YzZjNmIi8+PHBhdGggZD0iTTQ2IDlhMTYgMTYgMCAwIDAgMCAxNW0yOC0xNWExNiAxNiAwIDAgMSAwIDE1TTM3IDRhMjggMjggMCAwIDAgMCAyNm00Ni0yNmEyOCAyOCAwIDAgMSAwIDI2IiBmaWxsPSJub25lIiBzdHJva2U9IiM3ODc4NzgiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-18" connectable="0" parent="radio" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Базовая&#10;станция" vertex="1">
+          <mxGeometry height="44" width="151" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-19" connectable="0" parent="radio" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Сеть оператора&#10;Радиодоступ 4G / LTE&#10;Роуминг между сотами&#10;Модель и частоты —&#10;по инфраструктуре оператора" vertex="1">
+          <mxGeometry height="131" width="233" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="mobile" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="206" width="285" x="660" y="477" as="geometry"/>
+        </mxCell>
+        <mxCell id="mobile-picture" connectable="0" parent="mobile" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yNCA2MmMtMTMgMC0xOS05LTE2LTE5IDItOCAxMC0xMiAxOC0xMiA1LTE4IDMwLTI1IDQ1LTggMTMtNyAyOSAxIDI5IDE1IDE4IDEgMTggMjQgMSAyNHoiIGZpbGw9IiNlYWVhZWEiIHN0cm9rZT0iIzUzNTM1MyIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTMwIDQ1aDYwbS0zNS05LTEwIDkgMTAgOW0xMC0xOCAxMCA5LTEwIDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyNzI3MiIgc3Ryb2tlLXdpZHRoPSIyLjQiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-20" connectable="0" parent="mobile" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Мобильный&#10;оператор" vertex="1">
+          <mxGeometry height="44" width="179" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-21" connectable="0" parent="mobile" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Мобильная передача данных&#10;Пакетная IP-сеть / DNS&#10;Маршрут в Интернет&#10;Скорость зависит от сигнала&#10;HTTPS до сайта: TCP 443" vertex="1">
+          <mxGeometry height="131" width="261" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-2" edge="1" parent="1" source="candidate" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="radio">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-3" edge="1" parent="1" source="radio" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="mobile">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-22" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="LTE" vertex="1">
+          <mxGeometry height="27" width="40" x="320" y="495" as="geometry"/>
+        </mxCell>
+        <mxCell id="staff" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="206" width="231" x="71" y="732" as="geometry"/>
+        </mxCell>
+        <mxCell id="staff-picture" connectable="0" parent="staff" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHg9IjgiIHk9IjE3IiB3aWR0aD0iMjQiIGhlaWdodD0iNTQiIHJ4PSIzIiBmaWxsPSIjM2EzYTNhIi8+PHBhdGggZD0iTTEzIDI0aDE0bS0xNCA2aDE0IiBzdHJva2U9IiNiNWI1YjUiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iNjEiIHI9IjIuNSIgZmlsbD0iI2JmYmZiZiIvPjxyZWN0IHg9IjM5IiB5PSIxMCIgd2lkdGg9Ijc1IiBoZWlnaHQ9IjQ3IiByeD0iNCIgZmlsbD0iIzNhM2EzYSIvPjxyZWN0IHg9IjQ0IiB5PSIxNSIgd2lkdGg9IjY1IiBoZWlnaHQ9IjM3IiBmaWxsPSIjZTVlNWU1Ii8+PHBhdGggZD0iTTc2IDU3djhtLTE2IDJoMzIiIHN0cm9rZT0iIzNhM2EzYSIgc3Ryb2tlLXdpZHRoPSI1Ii8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-23" connectable="0" parent="staff" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Сотрудники" vertex="1">
+          <mxGeometry height="44" width="125" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-24" connectable="0" parent="staff" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=15;;verticalAlign=top;" value="ПК x86-64 · Intel Core i5&#10;16 ГБ RAM · SSD 256 ГБ&#10;Экран 1920 × 1080&#10;Google Chrome · Windows 11&#10;Chromium · JS / cookies&#10;/admin · именной вход" vertex="1">
+          <mxGeometry height="131" width="207" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="switch" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="206" width="252" x="337" y="732" as="geometry"/>
+        </mxCell>
+        <mxCell id="switch-picture" connectable="0" parent="switch" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik04IDM5bDIzLTE3aDc2bDggMTYtMjIgMTdIOHoiIGZpbGw9IiM4OTg5ODkiIHN0cm9rZT0iIzMwMzAzMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTggMzloODV2MjJIOHoiIGZpbGw9IiM0NzQ3NDciIHN0cm9rZT0iIzMwMzAzMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTkzIDM5bDIyLTE2djIyTDkzIDYxeiIgZmlsbD0iIzY0NjQ2NCIgc3Ryb2tlPSIjMzAzMDMwIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTYgNDdoN3Y3aC03em05IDBoN3Y3aC03em05IDBoN3Y3aC03em05IDBoN3Y3aC03em05IDBoN3Y3aC03em05IDBoN3Y3aC03em05IDBoN3Y3aC03em05IDBoN3Y3aC03eiIgZmlsbD0iI2RlZGVkZSIvPjwvc3ZnPg==;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-25" connectable="0" parent="switch" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="TP-Link&#10;TL-SG108" vertex="1">
+          <mxGeometry height="44" width="146" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-26" connectable="0" parent="switch" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Неуправляемый коммутатор&#10;8 × RJ45 · 10/100/1000 Мбит/с&#10;Уровень L2 · Auto-MDI/MDIX&#10;Проводная локальная сеть&#10;Wi-Fi и NAT не предоставляет" vertex="1">
+          <mxGeometry height="131" width="228" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="office" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="206" width="321" x="624" y="732" as="geometry"/>
+        </mxCell>
+        <mxCell id="office-picture" connectable="0" parent="office" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xMiA0MGwyNC0xN2g1OGwxNSAxNi0yMyAxOUgxMnoiIGZpbGw9IiNlOWU5ZTkiIHN0cm9rZT0iIzVmNWY1ZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDQwaDc0djIzSDEyeiIgZmlsbD0iI2M0YzRjNCIgc3Ryb2tlPSIjNWY1ZjVmIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNODYgNDBsMjMtMTV2MjFMODYgNjN6IiBmaWxsPSIjYTRhNGE0IiBzdHJva2U9IiM1ZjVmNWYiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yMiA0OGg5djhoLTl6bTEyIDBoOXY4aC05em0xMiAwaDl2OGgtOXptMTIgMGg5djhoLTl6bTEyIDBoOXY4aC05eiIgZmlsbD0iIzNhM2EzYSIvPjwvc3ZnPg==;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-27" connectable="0" parent="office" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="MikroTik hEX" vertex="1">
+          <mxGeometry height="44" width="215" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-28" connectable="0" parent="office" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="RB750Gr3 · RouterOS&#10;MT7621A · 2 ядра × 880 МГц&#10;256 МБ RAM · 16 МБ Flash&#10;5 × Gigabit Ethernet&#10;Шлюз: NAT / DHCP / IP firewall&#10;Профиль настройки — проектный" vertex="1">
+          <mxGeometry height="131" width="297" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-4" edge="1" parent="1" source="staff" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="switch">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-5" edge="1" parent="1" source="switch" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="office">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-29" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=15;" value="Техника и ОС — профили для проверки совместимости. Для эксплуатации используются актуальные обновления браузеров." vertex="1">
+          <mxGeometry height="34" width="875" x="72" y="947" as="geometry"/>
+        </mxCell>
+        <mxCell id="internet" parent="1" style="rounded=1;arcSize=12;fillColor=#f7f7f7;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="150" width="191" x="1030" y="512" as="geometry"/>
+        </mxCell>
+        <mxCell id="internet-picture" connectable="0" parent="internet" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yNCA2MmMtMTMgMC0xOS05LTE2LTE5IDItOCAxMC0xMiAxOC0xMiA1LTE4IDMwLTI1IDQ1LTggMTMtNyAyOSAxIDI5IDE1IDE4IDEgMTggMjQgMSAyNHoiIGZpbGw9IiNlYWVhZWEiIHN0cm9rZT0iIzUzNTM1MyIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTMwIDQ1aDYwbS0zNS05LTEwIDkgMTAgOW0xMC0xOCAxMCA5LTEwIDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyNzI3MiIgc3Ryb2tlLXdpZHRoPSIyLjQiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="82" width="122" x="34" y="7" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-30" connectable="0" parent="internet" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=22;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Интернет" vertex="1">
+          <mxGeometry height="27" width="167" x="12" y="87" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-31" connectable="0" parent="internet" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=16;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" value="Доступ по HTTPS" vertex="1">
+          <mxGeometry height="23" width="167" x="12" y="116" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-6" edge="1" parent="1" source="fixed" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.22;exitPerimeter=0;entryPerimeter=0;" target="internet">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1005" y="332"/>
+              <mxPoint x="1005" y="545"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-7" edge="1" parent="1" source="mobile" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="internet">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1006" y="580"/>
+              <mxPoint x="1006" y="587"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-8" edge="1" parent="1" source="office" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.8;exitPerimeter=0;entryPerimeter=0;" target="internet">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1007" y="835"/>
+              <mxPoint x="1007" y="632"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tls" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="192" width="272" x="1306" y="236" as="geometry"/>
+        </mxCell>
+        <mxCell id="tls-picture" connectable="0" parent="tls" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yNCA2MmMtMTMgMC0xOS05LTE2LTE5IDItOCAxMC0xMiAxOC0xMiA1LTE4IDMwLTI1IDQ1LTggMTMtNyAyOSAxIDI5IDE1IDE4IDEgMTggMjQgMSAyNHoiIGZpbGw9IiNlYWVhZWEiIHN0cm9rZT0iIzUzNTM1MyIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTMwIDQ1aDYwbS0zNS05LTEwIDkgMTAgOW0xMC0xOCAxMCA5LTEwIDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyNzI3MiIgc3Ryb2tlLXdpZHRoPSIyLjQiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-32" connectable="0" parent="tls" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Railway HTTPS" vertex="1">
+          <mxGeometry height="44" width="166" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-33" connectable="0" parent="tls" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="rastishka.pro — домен по ТЗ&#10;Публичный вход: HTTPS 443&#10;Завершение TLS на Railway&#10;Далее HTTP к сервису WAF&#10;Размещение WAF — проект" vertex="1">
+          <mxGeometry height="117" width="248" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf" parent="1" style="rounded=1;arcSize=12;fillColor=#f2f2f2;strokeColor=#737373;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" value="" vertex="1">
+          <mxGeometry height="192" width="311" x="1610" y="236" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf-picture" connectable="0" parent="waf" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xMSAxOWg5OHY0NEgxMXoiIGZpbGw9IiNlY2VjZWMiIHN0cm9rZT0iIzQ2NDY0NiIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTExIDMwaDk4bS05OCAxMWg5OG0tOTggMTFoOThNMzUgMTl2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMjQgMzB2MTFtMjUtMTF2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMzUgNDF2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMjQgNTJ2MTFtMjUtMTF2MTFtMjUtMTF2MTFtMjUtMTF2MTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzY2NjY2NiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTg1IDQ2bDIxLTYgMTAgNnYxM2MwIDgtNyAxNC0xNSAxOC04LTQtMTYtMTAtMTYtMTh6IiBmaWxsPSIjN2E3YTdhIiBzdHJva2U9IiMzMzMzMzMiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05NCA1OGw1IDUgOS0xMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-34" connectable="0" parent="waf" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="ModSecurity v3" vertex="1">
+          <mxGeometry height="44" width="205" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-35" connectable="0" parent="waf" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="NGINX · OWASP CRS 4.25 LTS&#10;HTTP :8080 · reverse proxy&#10;SecRuleEngine On · PL1&#10;Порог блокировки: 5&#10;Тело запроса: до 12 МиБ&#10;Защита от SQLi / XSS по CRS" vertex="1">
+          <mxGeometry height="117" width="287" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="next" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" value="" vertex="1">
+          <mxGeometry height="192" width="274" x="1953" y="236" as="geometry"/>
+        </mxCell>
+        <mxCell id="next-picture" connectable="0" parent="next" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xOCAyMWwxNy0xMWg2NGw4IDEwdjUzSDE4eiIgZmlsbD0iI2U4ZThlOCIgc3Ryb2tlPSIjNDc0NzQ3IiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTggMjFoNzV2NTJIMTh6IiBmaWxsPSIjNzU3NTc1IiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05MyAyMWwxNC0xMHY1MmwtMTQgMTB6IiBmaWxsPSIjYjJiMmIyIiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yNSAyOGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXoiIGZpbGw9IiM0NTQ1NDUiLz48cGF0aCBkPSJNNzUgMzNoNG0tNCAxNGg0bS00IDE0aDQiIHN0cm9rZT0iI2Q3ZDdkNyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-36" connectable="0" parent="next" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Next.js 16.3.4" vertex="1">
+          <mxGeometry height="44" width="168" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-37" connectable="0" parent="next" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="React 19.2.4 · App Router&#10;Node.js 22 · TypeScript 5&#10;Внутренний HTTP :3000&#10;Server Actions: до 11 МиБ&#10;Единый сервис сайта и /admin" vertex="1">
+          <mxGeometry height="117" width="250" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-9" edge="1" parent="1" source="internet" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="tls">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1251" y="587"/>
+              <mxPoint x="1251" y="332"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-10" edge="1" parent="1" source="tls" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=6 4;" target="waf">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-11" edge="1" parent="1" source="waf" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=6 4;" target="next">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-38" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="HTTPS" vertex="1">
+          <mxGeometry height="27" width="63" x="1219" y="465" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-39" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="HTTP" vertex="1">
+          <mxGeometry height="27" width="73" x="1557" y="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-40" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="HTTP" vertex="1">
+          <mxGeometry height="27" width="76" x="1899" y="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="runtime" parent="1" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="304" width="921" x="1306" y="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-42" connectable="0" parent="runtime" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="СЕРВЕРНАЯ ЗОНА / КОМПОНЕНТЫ NEXT.JS" vertex="1">
+          <mxGeometry height="33" width="885" x="18" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-12" edge="1" parent="1" source="next" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=0.5;exitY=1;entryX=0.8512486427795874;entryY=0;exitPerimeter=0;entryPerimeter=0;" target="runtime">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="public" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="190" width="282" x="1327" y="559" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-43" connectable="0" parent="public" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Публичные формы" vertex="1">
+          <mxGeometry height="30" width="254" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-44" connectable="0" parent="public" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Анкета из 7 шагов и отклик&#10;Zod · согласие · защита от ботов&#10;Идемпотентный ключ&#10;Лимит: 8 отправок / 15 мин&#10;Лимитер в памяти процесса" vertex="1">
+          <mxGeometry height="132" width="254" x="14" y="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="190" width="282" x="1626" y="559" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-45" connectable="0" parent="admin" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Панель /admin" vertex="1">
+          <mxGeometry height="30" width="254" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-46" connectable="0" parent="admin" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Auth.js 5 beta · JWT до 8 ч&#10;Argon2 · пароль в виде хеша&#10;Проверка active и прав в БД&#10;ADMIN / CONTENT_MANAGER&#10;Права на обращения — по флагам" vertex="1">
+          <mxGeometry height="132" width="254" x="14" y="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="server-actions" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="190" width="282" x="1925" y="559" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-47" connectable="0" parent="server-actions" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Серверные операции" vertex="1">
+          <mxGeometry height="30" width="254" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-48" connectable="0" parent="server-actions" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Prisma 7.8 · pg 8.22&#10;Записи и журнал AuditLog&#10;Резюме: тип / сигнатура / 10 МиБ&#10;Telegram после сохранения&#10;Отдельная запись NotificationLog" vertex="1">
+          <mxGeometry height="132" width="254" x="14" y="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-49" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;" value="Страницы, формы и панель обслуживаются одним приложением." vertex="1">
+          <mxGeometry height="28" width="875" x="1327" y="763" as="geometry"/>
+        </mxCell>
+        <mxCell id="data" parent="1" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="346" width="921" x="1306" y="900" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-50" connectable="0" parent="data" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="POSTGRESQL 18 / ЦЕЛЕВАЯ БД И БД СТЕНДА" vertex="1">
+          <mxGeometry height="33" width="885" x="18" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="postgres-picture" connectable="0" parent="data" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yMiAyMmg3NnY0M2MwIDE2LTc2IDE2LTc2IDB6IiBmaWxsPSIjZGFkYWRhIiBzdHJva2U9IiM1NTU1NTUiIHN0cm9rZS13aWR0aD0iMi41Ii8+PGVsbGlwc2UgY3g9IjYwIiBjeT0iMjIiIHJ4PSIzOCIgcnk9IjEzIiBmaWxsPSIjZjRmNGY0IiBzdHJva2U9IiM1NTU1NTUiIHN0cm9rZS13aWR0aD0iMi41Ii8+PHBhdGggZD0iTTIyIDM2YzAgMTYgNzYgMTYgNzYgME0yMiA1MGMwIDE2IDc2IDE2IDc2IDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdhN2E3YSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="92" width="108" x="19" y="81" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-13" edge="1" parent="1" source="runtime" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitPerimeter=0;entryPerimeter=0;" target="data">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-51" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="Prisma / pg · SQL" vertex="1">
+          <mxGeometry height="27" width="188" x="1673" y="835" as="geometry"/>
+        </mxCell>
+        <mxCell id="family" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="172" width="240" x="1440" y="962" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-52" connectable="0" parent="family" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Заявки" vertex="1">
+          <mxGeometry height="30" width="212" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-53" connectable="0" parent="family" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Application&#10;ChildProfile&#10;Анкета и профиль&#10;Совместное сохранение" vertex="1">
+          <mxGeometry height="118" width="212" x="14" y="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="jobs" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="172" width="240" x="1693" y="962" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-54" connectable="0" parent="jobs" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Кадры и контент" vertex="1">
+          <mxGeometry height="30" width="212" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-55" connectable="0" parent="jobs" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="VacancyResponse&#10;Vacancy · News&#10;Ключ и метаданные резюме&#10;Файл находится в Supabase" vertex="1">
+          <mxGeometry height="118" width="212" x="14" y="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="access-data" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="172" width="240" x="1946" y="962" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-56" connectable="0" parent="access-data" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Доступ и журналы" vertex="1">
+          <mxGeometry height="30" width="212" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-57" connectable="0" parent="access-data" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="AdminUser · AuditLog&#10;NotificationLog&#10;SiteSetting&#10;NotificationConfig" vertex="1">
+          <mxGeometry height="118" width="212" x="14" y="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="dev" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="218" width="249" x="73" y="1090" as="geometry"/>
+        </mxCell>
+        <mxCell id="dev-picture" connectable="0" parent="dev" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHg9IjIwIiB5PSI5IiB3aWR0aD0iODAiIGhlaWdodD0iNDkiIHJ4PSI1IiBmaWxsPSIjMzgzODM4Ii8+PHJlY3QgeD0iMjUiIHk9IjE0IiB3aWR0aD0iNzAiIGhlaWdodD0iMzkiIGZpbGw9IiNlYmViZWIiLz48cGF0aCBkPSJNMjAgNThoODBsMTQgMTAtNCA0SDEwbC00LTR6IiBmaWxsPSIjYTlhOWE5IiBzdHJva2U9IiMzYTNhM2EiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik00OSA2M2gyMiIgc3Ryb2tlPSIjNTA1MDUwIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-58" connectable="0" parent="dev" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Разработчик" vertex="1">
+          <mxGeometry height="44" width="143" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-59" connectable="0" parent="dev" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Ноутбук x86-64 · 4 ядра CPU&#10;16 ГБ RAM · SSD 512 ГБ&#10;Windows 11 / WSL2 / Docker&#10;Microsoft Edge · Chromium&#10;Node.js 22 · pnpm 11.19&#10;Git · локальный Next.js" vertex="1">
+          <mxGeometry height="143" width="225" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="git" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="218" width="252" x="351" y="1090" as="geometry"/>
+        </mxCell>
+        <mxCell id="git-picture" connectable="0" parent="git" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik02MCA4bDMyIDMyLTMyIDMyLTMyLTMyeiIgZmlsbD0iIzZhNmE2YSIvPjxwYXRoIGQ9Ik00OCAyNGwyNSAyNU01NCAzMXYyMyIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48Y2lyY2xlIGN4PSI0OSIgY3k9IjI1IiByPSI1IiBmaWxsPSIjZmZmZmZmIi8+PGNpcmNsZSBjeD0iNTQiIGN5PSI1NSIgcj0iNSIgZmlsbD0iI2ZmZmZmZiIvPjxjaXJjbGUgY3g9IjczIiBjeT0iNDkiIHI9IjUiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-60" connectable="0" parent="git" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="GitHub" vertex="1">
+          <mxGeometry height="44" width="146" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-61" connectable="0" parent="git" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Репозиторий исходного кода&#10;Git · push / pull request&#10;HTTPS 443 / SSH 22&#10;Ветки и история изменений&#10;Секреты в код не включаются" vertex="1">
+          <mxGeometry height="143" width="228" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="ci" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="218" width="269" x="634" y="1090" as="geometry"/>
+        </mxCell>
+        <mxCell id="ci-picture" connectable="0" parent="ci" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xOCAyMWwxNy0xMWg2NGw4IDEwdjUzSDE4eiIgZmlsbD0iI2U4ZThlOCIgc3Ryb2tlPSIjNDc0NzQ3IiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTggMjFoNzV2NTJIMTh6IiBmaWxsPSIjNzU3NTc1IiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05MyAyMWwxNC0xMHY1MmwtMTQgMTB6IiBmaWxsPSIjYjJiMmIyIiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yNSAyOGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXoiIGZpbGw9IiM0NTQ1NDUiLz48cGF0aCBkPSJNNzUgMzNoNG0tNCAxNGg0bS00IDE0aDQiIHN0cm9rZT0iI2Q3ZDdkNyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-62" connectable="0" parent="ci" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="GitHub Actions" vertex="1">
+          <mxGeometry height="44" width="163" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-63" connectable="0" parent="ci" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Runner: ubuntu-latest&#10;Node.js 22 · pnpm 11.19.0&#10;TypeScript → ESLint → Jest&#10;Затем pnpm build&#10;Запуск: push main / pull request&#10;Лимит задания: 15 минут" vertex="1">
+          <mxGeometry height="143" width="245" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="release" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" value="" vertex="1">
+          <mxGeometry height="218" width="271" x="934" y="1090" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-64" connectable="0" parent="release" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Выпуск Railway" vertex="1">
+          <mxGeometry height="30" width="243" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-65" connectable="0" parent="release" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Этап по ТЗ после CI&#10;prisma migrate deploy&#10;Выпуск и проверка домена&#10;Автодеплой этим workflow&#10;не настроен" vertex="1">
+          <mxGeometry height="162" width="243" x="14" y="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-14" edge="1" parent="1" source="dev" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="git">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-15" edge="1" parent="1" source="git" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;" target="ci">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-16" edge="1" parent="1" source="ci" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=6 4;" target="release">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ops-admin" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="194" width="547" x="73" y="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-66" connectable="0" parent="ops-admin" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Администратор сайта" vertex="1">
+          <mxGeometry height="30" width="519" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-67" connectable="0" parent="ops-admin" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="ПК: Intel Core i5 · 16 ГБ RAM · SSD 256 ГБ&#10;Windows 11 · Google Chrome (Chromium)&#10;HTTPS → rastishka.pro/admin · JS и cookies&#10;ADMIN: заявки, отклики, пользователи, уведомления&#10;Общая сетевая цепочка — через TL-SG108 и hEX" vertex="1">
+          <mxGeometry height="144" width="519" x="14" y="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="ops-content" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="194" width="558" x="647" y="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-68" connectable="0" parent="ops-content" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Контент-менеджер" vertex="1">
+          <mxGeometry height="30" width="530" x="14" y="9" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-69" connectable="0" parent="ops-content" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="Тот же проектный профиль ПК и Google Chrome&#10;HTTPS → rastishka.pro/admin · JS и cookies&#10;CONTENT_MANAGER: контент и настройки&#10;Обращения — по canViewApplications / canViewResponses&#10;В текущем коде флаги также разрешают изменение статуса" vertex="1">
+          <mxGeometry height="144" width="530" x="14" y="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="tg" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="176" width="418" x="1307" y="1398" as="geometry"/>
+        </mxCell>
+        <mxCell id="tg-picture" connectable="0" parent="tg" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjNzg3ODc4Ii8+PHBhdGggZD0iTTM5IDM5bDQxLTE3LTggMzUtMTMtMTAtOCA4IDEtMTQgMTgtMTItMjIgMTV6IiBmaWxsPSIjZmZmZmZmIi8+PC9zdmc+;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-71" connectable="0" parent="tg" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Telegram Bot API" vertex="1">
+          <mxGeometry height="44" width="312" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-72" connectable="0" parent="tg" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="HTTPS 443 · POST sendMessage&#10;Тайм-аут запроса: 10 секунд&#10;Только тип события и ID записи, без ПДн&#10;NotificationLog · статус и ручной повтор&#10;Ссылка на карточку в сообщении пока отсутствует" vertex="1">
+          <mxGeometry height="101" width="394" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="files" parent="1" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" value="" vertex="1">
+          <mxGeometry height="176" width="460" x="1767" y="1398" as="geometry"/>
+        </mxCell>
+        <mxCell id="files-picture" connectable="0" parent="files" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yNSAyNWgyN2w2IDhoMzZ2MzVIMjV6IiBmaWxsPSIjZDVkNWQ1IiBzdHJva2U9IiM1YTVhNWEiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik00NiAxOWgyM2wxMSAxMXYyNUg0NnoiIGZpbGw9IiNmOWY5ZjkiIHN0cm9rZT0iIzVhNWE1YSIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTY5IDE5djExaDExbS0yOSA3aDIybS0yMiA3aDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiM3MTcxNzEiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yNCA0NGg3OGwtMTEgMjVIMjV6IiBmaWxsPSIjYmJiYmJiIiBzdHJva2U9IiM1YTVhNWEiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==;" value="" vertex="1">
+          <mxGeometry height="44" width="72" x="10" y="12" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-73" connectable="0" parent="files" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" value="Supabase Storage" vertex="1">
+          <mxGeometry height="44" width="354" x="94" y="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-74" connectable="0" parent="files" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" value="HTTPS 443 · приватный bucket resumes&#10;Резюме PDF / DOC / DOCX / JPG / PNG ≤ 10 МиБ&#10;В БД — ключ, MIME, имя и размер файла&#10;Подписанная ссылка: 60 секунд&#10;По ТЗ требуется PostgreSQL bytea — расхождение" vertex="1">
+          <mxGeometry height="101" width="436" x="12" y="63" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-17" edge="1" parent="1" source="runtime" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=0;exitY=0.74;entryX=0.5;entryY=0;exitPerimeter=0;entryPerimeter=0;" target="tg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1265" y="724.96"/>
+              <mxPoint x="1265" y="1381"/>
+              <mxPoint x="1516" y="1381"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-18" edge="1" parent="1" source="runtime" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.74;entryX=0.5;entryY=0;exitPerimeter=0;entryPerimeter=0;" target="files">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2274" y="724.96"/>
+              <mxPoint x="2274" y="1373"/>
+              <mxPoint x="1997" y="1373"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="text-75" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="HTTPS / событие" vertex="1">
+          <mxGeometry height="27" width="150" x="1189" y="1324" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-76" connectable="0" parent="1" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" value="HTTPS / файл" vertex="1">
+          <mxGeometry height="27" width="122" x="2154" y="1308" as="geometry"/>
+        </mxCell>
+      <mxCell id="spec-intro" value="Модели и рабочие места — проектные примеры. Параметры ПО сверены с кодом; WAF в Railway — целевая схема." vertex="1" parent="1" connectable="0" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;"><mxGeometry x="48" y="108" width="2204" height="32" as="geometry"/></mxCell><mxCell id="db-spec" value="SQL/TCP 5432 · доступ только от приложения · 10 моделей Prisma · миграции&#10;В стенде: postgres:18-bookworm, том pgdata. CPU/RAM и диск Railway уточняются по размещению." vertex="1" parent="1" connectable="0" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=16;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;"><mxGeometry x="1327" y="1160" width="875" height="66" as="geometry"/></mxCell><mxCell id="browser-spec" value="БРАУЗЕРЫ: Safari / WebKit; Chrome и Edge / Chromium. JavaScript включён; для входа нужны cookies.&#10;Базовая поддержка Next.js: Safari 16.4+, Chrome / Edge / Firefox 111+. Точные сборки и результаты испытаний фиксируются в протоколе." vertex="1" parent="1" connectable="0" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=17;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;"><mxGeometry x="48" y="1651" width="2204" height="53" as="geometry"/></mxCell><mxCell id="deployment-status" value="СТАТУС: WAF описан файлами infra/waf; локальные испытания и включение в Railway требуют подтверждения.&#10;В Railway публичным должен быть только вход через WAF. Прямой доступ к Next.js и PostgreSQL требуется закрыть." vertex="1" parent="1" connectable="0" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=17;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;"><mxGeometry x="48" y="1723" width="2204" height="53" as="geometry"/></mxCell><mxCell id="footer-spec" value="Источники: ТЗ v1.2; package.json; prisma/schema.prisma; .github/workflows/ci.yml; infra/waf; спецификации Apple, Samsung, TP-Link и MikroTik." vertex="1" parent="1" connectable="0" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=14;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;"><mxGeometry x="48" y="1800" width="2204" height="24" as="geometry"/></mxCell></root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="view-2" name="02 · Файрвол и изоляция">
+    <mxGraphModel grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2300" pageHeight="1420" background="#FFFFFF">
+      <root>
+        <mxCell id="0" style=""/>
+        <mxCell id="1" parent="0" style=""/>
+        <mxCell id="text-0" value="РАСтишка / СЕТЕВАЯ АРХИТЕКТУРА" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="48" y="23" width="1600" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-1" value="02 / 02" style="text;html=0;whiteSpace=wrap;align=right;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="2174" y="23" width="78" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-2" value="ModSecurity перед Next.js" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=38;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="48" y="55" width="2204" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-3" value="OWASP Core Rule Set 4.25 LTS / локальный стенд и целевое подключение к Railway" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="48" y="106" width="2204" height="37" as="geometry"/>
+        </mxCell>
+        <mxCell id="top-rule" value="" style="fillColor=#151515;strokeColor=none;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="48" y="151" width="2204" height="2" as="geometry"/>
+        </mxCell>
+        <mxCell id="bottom-rule" value="" style="fillColor=#b1b1b1;strokeColor=none;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="48" y="1364" width="2204" height="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-4" value="Файлы реализации: infra/waf/Dockerfile, proxy_backend.conf.template, compose.yaml, app.Dockerfile и smoke.ps1." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="48" y="1370" width="2204" height="32" as="geometry"/>
+        </mxCell>
+        <mxCell id="local" value="" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="48" y="176" width="2204" height="471" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-5" value="01 ЛОКАЛЬНЫЙ СТЕНД / DOCKER COMPOSE" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="local" connectable="0">
+          <mxGeometry x="18" y="9" width="2168" height="33" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="78" y="262" width="351" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxyZWN0IHg9IjIwIiB5PSI5IiB3aWR0aD0iODAiIGhlaWdodD0iNDkiIHJ4PSI1IiBmaWxsPSIjMzgzODM4Ii8+PHJlY3QgeD0iMjUiIHk9IjE0IiB3aWR0aD0iNzAiIGhlaWdodD0iMzkiIGZpbGw9IiNlYmViZWIiLz48cGF0aCBkPSJNMjAgNThoODBsMTQgMTAtNCA0SDEwbC00LTR6IiBmaWxsPSIjYTlhOWE5IiBzdHJva2U9IiMzYTNhM2EiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik00OSA2M2gyMiIgc3Ryb2tlPSIjNTA1MDUwIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=;" vertex="1" parent="browser" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-6" value="Microsoft Edge" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="browser" connectable="0">
+          <mxGeometry x="94" y="10" width="247" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-7" value="Win 11 · Chromium · JS / cookies&#10;localhost:8080 (127.0.0.1)&#10;CPU 4 ядра · RAM 16 ГБ · SSD 512 ГБ" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="browser" connectable="0">
+          <mxGeometry x="12" y="65" width="327.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf-local" value="" style="rounded=1;arcSize=12;fillColor=#f2f2f2;strokeColor=#737373;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="532" y="262" width="500" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf-local-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xMSAxOWg5OHY0NEgxMXoiIGZpbGw9IiNlY2VjZWMiIHN0cm9rZT0iIzQ2NDY0NiIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTExIDMwaDk4bS05OCAxMWg5OG0tOTggMTFoOThNMzUgMTl2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMjQgMzB2MTFtMjUtMTF2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMzUgNDF2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMjQgNTJ2MTFtMjUtMTF2MTFtMjUtMTF2MTFtMjUtMTF2MTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzY2NjY2NiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTg1IDQ2bDIxLTYgMTAgNnYxM2MwIDgtNyAxNC0xNSAxOC04LTQtMTYtMTAtMTYtMTh6IiBmaWxsPSIjN2E3YTdhIiBzdHJva2U9IiMzMzMzMzMiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05NCA1OGw1IDUgOS0xMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=;" vertex="1" parent="waf-local" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-8" value="NGINX + ModSecurity v3" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="waf-local" connectable="0">
+          <mxGeometry x="94" y="10" width="396" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-9" value="NGINX · HTTP :8080 · CRS 4.25 LTS&#10;ModSecurity v3 · PL1 · порог 5&#10;Режим On · профиль в infra/waf" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="waf-local" connectable="0">
+          <mxGeometry x="12" y="65" width="476.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="app-local" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="1133" y="262" width="454" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="app-local-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xOCAyMWwxNy0xMWg2NGw4IDEwdjUzSDE4eiIgZmlsbD0iI2U4ZThlOCIgc3Ryb2tlPSIjNDc0NzQ3IiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTggMjFoNzV2NTJIMTh6IiBmaWxsPSIjNzU3NTc1IiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05MyAyMWwxNC0xMHY1MmwtMTQgMTB6IiBmaWxsPSIjYjJiMmIyIiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yNSAyOGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXoiIGZpbGw9IiM0NTQ1NDUiLz48cGF0aCBkPSJNNzUgMzNoNG0tNCAxNGg0bS00IDE0aDQiIHN0cm9rZT0iI2Q3ZDdkNyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" vertex="1" parent="app-local" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-10" value="Next.js 16.3.4" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="app-local" connectable="0">
+          <mxGeometry x="94" y="10" width="350" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-11" value="Node.js 22 · React 19.2.4&#10;HTTP app:3000 · сеть edge&#10;Server Actions: до 11 МиБ" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="app-local" connectable="0">
+          <mxGeometry x="12" y="65" width="430.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="db-local" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="1689" y="262" width="532" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="db-local-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yMiAyMmg3NnY0M2MwIDE2LTc2IDE2LTc2IDB6IiBmaWxsPSIjZGFkYWRhIiBzdHJva2U9IiM1NTU1NTUiIHN0cm9rZS13aWR0aD0iMi41Ii8+PGVsbGlwc2UgY3g9IjYwIiBjeT0iMjIiIHJ4PSIzOCIgcnk9IjEzIiBmaWxsPSIjZjRmNGY0IiBzdHJva2U9IiM1NTU1NTUiIHN0cm9rZS13aWR0aD0iMi41Ii8+PHBhdGggZD0iTTIyIDM2YzAgMTYgNzYgMTYgNzYgME0yMiA1MGMwIDE2IDc2IDE2IDc2IDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdhN2E3YSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" vertex="1" parent="db-local" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-12" value="PostgreSQL 18" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="db-local" connectable="0">
+          <mxGeometry x="94" y="10" width="428" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-13" value="Образ postgres:18-bookworm&#10;SQL db:5432 · сеть database (internal)&#10;Отдельный том pgdata · миграции Prisma" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="db-local" connectable="0">
+          <mxGeometry x="12" y="65" width="508.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-0" edge="1" parent="1" source="browser" target="waf-local" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-1" edge="1" parent="1" source="waf-local" target="app-local" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-2" edge="1" parent="1" source="app-local" target="db-local" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-14" value="HTTP" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="436" y="285" width="91" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-15" value="HTTP" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="1037" y="285" width="90" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-16" value="SQL" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="1592" y="285" width="91" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="filter" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="78" y="452" width="673" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-17" value="Проверка входящего запроса" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="filter" connectable="0">
+          <mxGeometry x="14" y="9" width="645" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-18" value="CRS проверяет URL, параметры, заголовки и тело запроса.&#10;При срабатывании порога блокировки WAF отвечает 403." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="filter" connectable="0">
+          <mxGeometry x="14" y="42" width="645" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="body" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="812" y="452" width="673" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-19" value="Совместимость с формами" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="body" connectable="0">
+          <mxGeometry x="14" y="9" width="645" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-20" value="Предел WAF 12 МиБ, Next.js 11 МиБ.&#10;Файл резюме до 10 МиБ проверяется приложением." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="body" connectable="0">
+          <mxGeometry x="14" y="42" width="645" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="headers" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#151515;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="1546" y="452" width="675" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-21" value="Проксирование и журналы" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=20;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="headers" connectable="0">
+          <mxGeometry x="14" y="9" width="647" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-22" value="Host сохраняется, forwarded-заголовки заменяются.&#10;Полный аудит HTTP отключён в профиле стенда." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="headers" connectable="0">
+          <mxGeometry x="14" y="42" width="647" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-23" value="Next.js и PostgreSQL доступны только внутри сетей Compose. Приложение применяет миграции к отдельной БД стенда." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=17;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="78" y="601" width="2143" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="prod" value="" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="48" y="693" width="2204" height="473" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-24" value="02 RAILWAY / ЦЕЛЕВАЯ СХЕМА ПОДКЛЮЧЕНИЯ" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="prod" connectable="0">
+          <mxGeometry x="18" y="9" width="2168" height="33" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="78" y="775" width="351" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yNCA2MmMtMTMgMC0xOS05LTE2LTE5IDItOCAxMC0xMiAxOC0xMiA1LTE4IDMwLTI1IDQ1LTggMTMtNyAyOSAxIDI5IDE1IDE4IDEgMTggMjQgMSAyNHoiIGZpbGw9IiNlYWVhZWEiIHN0cm9rZT0iIzUzNTM1MyIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTMwIDQ1aDYwbS0zNS05LTEwIDkgMTAgOW0xMC0xOCAxMCA5LTEwIDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcyNzI3MiIgc3Ryb2tlLXdpZHRoPSIyLjQiLz48L3N2Zz4=;" vertex="1" parent="edge" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-25" value="Railway HTTPS" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="edge" connectable="0">
+          <mxGeometry x="94" y="10" width="247" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-26" value="Целевой HTTPS 443 для rastishka.pro&#10;TLS на Railway → HTTP к WAF&#10;Переключение домена требует проверки" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="edge" connectable="0">
+          <mxGeometry x="12" y="65" width="327.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf-prod" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="532" y="775" width="500" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf-prod-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xMSAxOWg5OHY0NEgxMXoiIGZpbGw9IiNlY2VjZWMiIHN0cm9rZT0iIzQ2NDY0NiIgc3Ryb2tlLXdpZHRoPSIzIi8+PHBhdGggZD0iTTExIDMwaDk4bS05OCAxMWg5OG0tOTggMTFoOThNMzUgMTl2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMjQgMzB2MTFtMjUtMTF2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMzUgNDF2MTFtMjUtMTF2MTFtMjUtMTF2MTFNMjQgNTJ2MTFtMjUtMTF2MTFtMjUtMTF2MTFtMjUtMTF2MTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzY2NjY2NiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTg1IDQ2bDIxLTYgMTAgNnYxM2MwIDgtNyAxNC0xNSAxOC04LTQtMTYtMTAtMTYtMTh6IiBmaWxsPSIjN2E3YTdhIiBzdHJva2U9IiMzMzMzMzMiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05NCA1OGw1IDUgOS0xMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=;" vertex="1" parent="waf-prod" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-27" value="Сервис WAF" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="waf-prod" connectable="0">
+          <mxGeometry x="94" y="10" width="396" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-28" value="Сборка из infra/waf&#10;BACKEND — внутренний адрес Next.js" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;fontSize=16;;verticalAlign=top;" vertex="1" parent="waf-prod" connectable="0">
+          <mxGeometry x="12" y="65" width="476.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="app-prod" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="1133" y="775" width="454" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="app-prod-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0xOCAyMWwxNy0xMWg2NGw4IDEwdjUzSDE4eiIgZmlsbD0iI2U4ZThlOCIgc3Ryb2tlPSIjNDc0NzQ3IiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTggMjFoNzV2NTJIMTh6IiBmaWxsPSIjNzU3NTc1IiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik05MyAyMWwxNC0xMHY1MmwtMTQgMTB6IiBmaWxsPSIjYjJiMmIyIiBzdHJva2U9IiM0NzQ3NDciIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yNSAyOGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXptMCAxNGg1OXYxMEgyNXoiIGZpbGw9IiM0NTQ1NDUiLz48cGF0aCBkPSJNNzUgMzNoNG0tNCAxNGg0bS00IDE0aDQiIHN0cm9rZT0iI2Q3ZDdkNyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" vertex="1" parent="app-prod" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-29" value="Приватный Next.js" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="app-prod" connectable="0">
+          <mxGeometry x="94" y="10" width="350" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-30" value="Next.js 16.3.4 · Node.js 22 · :3000&#10;HTTP по railway.internal&#10;Сессия, active и права — на сервере" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="app-prod" connectable="0">
+          <mxGeometry x="12" y="65" width="430.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="db-prod" value="" style="rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#737373;strokeWidth=1.5;html=0;dashed=1;dashPattern=6 4;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="1689" y="775" width="532" height="162" as="geometry"/>
+        </mxCell>
+        <mxCell id="db-prod-picture" value="" style="shape=image;imageAspect=1;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgODAiPjxwYXRoIGQ9Ik0yMiAyMmg3NnY0M2MwIDE2LTc2IDE2LTc2IDB6IiBmaWxsPSIjZGFkYWRhIiBzdHJva2U9IiM1NTU1NTUiIHN0cm9rZS13aWR0aD0iMi41Ii8+PGVsbGlwc2UgY3g9IjYwIiBjeT0iMjIiIHJ4PSIzOCIgcnk9IjEzIiBmaWxsPSIjZjRmNGY0IiBzdHJva2U9IiM1NTU1NTUiIHN0cm9rZS13aWR0aD0iMi41Ii8+PHBhdGggZD0iTTIyIDM2YzAgMTYgNzYgMTYgNzYgME0yMiA1MGMwIDE2IDc2IDE2IDc2IDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdhN2E3YSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+;" vertex="1" parent="db-prod" connectable="0">
+          <mxGeometry x="8" y="14" width="78" height="58" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-31" value="Приватный PostgreSQL" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=19;fontStyle=1;fontColor=#151515;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="db-prod" connectable="0">
+          <mxGeometry x="94" y="10" width="428" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-32" value="PostgreSQL 18 — целевая версия&#10;Prisma 7.8 / pg · SQL :5432&#10;CPU/RAM и диск — по настройкам Railway" style="text;html=0;whiteSpace=wrap;align=left;fontFamily=Arial;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;;;fontSize=16;;verticalAlign=top;" vertex="1" parent="db-prod" connectable="0">
+          <mxGeometry x="12" y="65" width="508.0" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-3" edge="1" parent="1" source="edge" target="waf-prod" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=6 4;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-4" edge="1" parent="1" source="waf-prod" target="app-prod" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=6 4;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-5" edge="1" parent="1" source="app-prod" target="db-prod" style="edgeStyle=none;rounded=0;endArrow=block;endFill=1;endSize=7;html=0;strokeWidth=1.6;strokeColor=#151515;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=6 4;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-33" value="HTTP" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="436" y="803" width="91" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-34" value="HTTP" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="1037" y="803" width="90" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-35" value="SQL" style="text;html=0;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=0;fontColor=#151515;strokeColor=none;fillColor=#ffffff;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="1592" y="803" width="91" height="27" as="geometry"/>
+        </mxCell>
+        <mxCell id="conditions" value="" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="78" y="972" width="2143" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-36" value="Перед переключением домена: проверить доверенный прокси, Host и HTTPS-заголовки, вход Auth.js, обе формы, допустимый multipart и отсутствие публичного обходного маршрута." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=17;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="conditions" connectable="0">
+          <mxGeometry x="15" y="4" width="2113" height="87" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-37" value="Статус: конфигурация WAF сохранена в репозитории. Локальные испытания не подтверждены; размещение WAF в Railway — проектное." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=18;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="78" y="1090" width="2143" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="verification" value="" style="fillColor=#f5f5f5;strokeColor=#b1b1b1;strokeWidth=1.5;html=0;" vertex="1" parent="1" connectable="1">
+          <mxGeometry x="48" y="1210" width="2204" height="89" as="geometry"/>
+        </mxCell>
+        <mxCell id="text-38" value="Сценарий проверки: infra/waf/smoke.ps1. Ожидаются HTTP 200 для сайта и входа и HTTP 403 для учебных запросов XSS / SQLi; фактические результаты оформляются отдельно." style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=17;fontStyle=0;fontColor=#454545;strokeColor=none;fillColor=none;spacing=0;" vertex="1" parent="verification" connectable="0">
+          <mxGeometry x="15" y="4" width="2174" height="81" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
